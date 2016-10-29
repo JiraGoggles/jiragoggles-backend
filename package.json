@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "grunt": "grunt",
-    "start": "nodemon ./bin/www"
+    "grunt": "grunt && grunt watch",
+    "start": "NODE_ENV=development nodemon ./www.js",
+    "start-prod": "NODE_ENV=production nodemon ./www.js"
   },
   "keywords": [],
   "author": "",

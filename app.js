@@ -39,3 +39,4 @@ class Server {
 }
 var server = Server.bootstrap();
 module.exports = server;
+//# sourceMappingURL=app.js.map

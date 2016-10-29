@@ -19,7 +19,8 @@
         "installed": "/installed"
     },
     "scopes": [
-        "READ"
+        "READ",
+        "ACT_AS_USER"
     ],
     "modules": {
         "generalPages": [

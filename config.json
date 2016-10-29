@@ -1,8 +1,8 @@
 {
     "development": {
         "port": 3000,
-        "errorTemplate": true,
-        "localBaseUrl": "https://e5cff55a.ngrok.io",
+        "errorTemplate": false,
+        "localBaseUrl": "https://08af382b.ngrok.io",
         "store": {
             "adapter": "jugglingdb",
             "type": "sqlite3",
@@ -11,7 +11,7 @@
     },
     "production": {
         "port": "$PORT",
-        "errorTemplate": true,
+        "errorTemplate": false,
         "localBaseUrl": "EMPTY FOR NOW",
         "store": {
             "type": "postgres",
