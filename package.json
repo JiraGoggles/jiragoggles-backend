@@ -4,8 +4,10 @@
   "description": "",
   "scripts": {
     "grunt": "grunt && grunt watch",
-    "start": "NODE_ENV=development nodemon ./www.js",
-    "start-prod": "NODE_ENV=production nodemon ./www.js"
+    "dev": "NODE_ENV=development nodemon /www.js",
+    "prod": "NODE_ENV=production nodemon /www.js",
+    "win-dev": "set NODE_ENV=development && nodemon www.js",
+    "win-prod": "set NODE_ENV=production && nodemon www.js"
   },
   "keywords": [],
   "author": "",
