@@ -3,6 +3,7 @@ import * as express from "express";
 // import all the sub-routes
 import projectsRoute from "./projects";
 import usersRoute from "./users";
+import notesRoute from "./notes";
 
 export default (addon) => {
     // the main router responsible for handling all requests
@@ -10,6 +11,7 @@ export default (addon) => {
     // make the router use all the sub-routes under specified paths
     router.use("/projects", projectsRoute(addon));
     router.use("/users", usersRoute(addon));
+    router.use("/notes", notesRoute(addon));
 
     // Serve the main page
     router.get("/", (req, res) => {
