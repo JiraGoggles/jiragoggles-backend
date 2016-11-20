@@ -3,7 +3,7 @@ import * as express from "express";
 // import all the sub-routes
 import projectsRoute from "./projects";
 import usersRoute from "./users";
-import notesRoute from "./notes";
+import cardRoute from "./card";
 import jqlRoute from "./jql";
 
 export default (addon) => {
@@ -12,7 +12,7 @@ export default (addon) => {
     // make the router use all the sub-routes under specified paths
     router.use("/projects", projectsRoute(addon));
     router.use("/users", usersRoute(addon));
-    router.use("/notes", notesRoute(addon));
+    router.use("/card", cardRoute(addon));
     router.use("/jql", jqlRoute(addon));
 
     // Serve the main page
