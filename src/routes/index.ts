@@ -4,6 +4,7 @@ import * as express from "express";
 import projectsRoute from "./projects";
 import usersRoute from "./users";
 import notesRoute from "./notes";
+import jqlRoute from "./jql";
 
 export default (addon) => {
     // the main router responsible for handling all requests
@@ -12,6 +13,7 @@ export default (addon) => {
     router.use("/projects", projectsRoute(addon));
     router.use("/users", usersRoute(addon));
     router.use("/notes", notesRoute(addon));
+    router.use("/jql", jqlRoute(addon));
 
     // Serve the main page
     router.get("/", (req, res) => {
