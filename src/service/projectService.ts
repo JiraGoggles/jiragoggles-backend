@@ -23,7 +23,7 @@ export default class ProjectService {
     }
 
     private getProjects(httpClient, callback) {
-        httpClient.get('/rest/api/2/project', (err, jiraRes, body) => {
+        httpClient.get('/rest/api/2/project?expand=description', (err, jiraRes, body) => {
             var toReturn: CardWebModel[] = [];
             for(let project of JSON.parse(body)){
                 toReturn.push(this.projectToCardWebModel.apply(project));
