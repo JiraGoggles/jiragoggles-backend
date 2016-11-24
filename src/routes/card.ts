@@ -3,7 +3,7 @@
  */
 import * as express from "express";
 import credentials from "../credentials";
-import ProjectService from  "../service/projectService";
+import {ProjectService} from  "../service/projectService";
 
 export default (addon) => {
     const router = express.Router();
@@ -11,9 +11,9 @@ export default (addon) => {
     const projectService = new ProjectService();
 
     router.get('/project', (req, res) => {
-        projectService.getProjectCards(httpClient, (cards) => {
+        projectService.getProjectCards(httpClient).then((projectResponse) => {
             res.setHeader("Content-Type", "application/json");
-            res.send(cards);
+            res.send(projectResponse);
         });
     });
 

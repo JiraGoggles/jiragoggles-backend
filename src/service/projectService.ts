@@ -1,60 +1,51 @@
-import CardWebModel from "../model/cardWebModel";
-import JqlService from "./jqlService";
-import JqlModel from "../model/jqlModel";
+import {CardWebModel} from "../model/cardWebModel";
+import {JqlService} from "./jqlService";
+import {ProjectToCardWebModel} from "../converter/projectToCardWebModel";
+import {Dictionary} from "../commons/dictionary";
+import {EpicService} from "./epicService";
 
-import EpicJqlToCardWebModel from "../converter/epicJqlToCardWebModel";
-import ProjectToCardWebModel from "../converter/projectToCardWebModel";
 /**
  * Created by JJax on 19.11.2016.
  */
 
-export default class ProjectService {
+export class ProjectService {
     private jqlService = new JqlService();
     private projectToCardWebModel = new ProjectToCardWebModel();
-    private epicJqlToCardWebModel = new EpicJqlToCardWebModel();
+    private epicService = new EpicService();
 
-    public getProjectCards(httpClient, callback) {
-        //TODO: it can be in some way refactored, perhaps with async or promises lib
-        this.getProjects(httpClient, (projects) => {
-            this.insertEpicsForProjects(projects, httpClient, (projectsWithEpics) => {
-                callback(projectsWithEpics);
+    public async getProjectCards(httpClient): Promise<CardWebModel[]> {
+        let [epicsWithParentId, projects] = await Promise.all([this.epicService.getEpicsWithParentId(httpClient),
+            this.getProjects(httpClient)]);
+        return new Promise<any>((resolve, reject) => {
+            resolve(this.insertEpicsToProjects(epicsWithParentId, projects));
+        });
+    }
+
+    private insertEpicsToProjects(epics: Dictionary<CardWebModel[]>, projects: CardWebModel[]): CardWebModel[] {
+        var toReturn: CardWebModel[] = new Array();
+        for (let project of projects) {
+            project.subCards = epics[project.id];
+            toReturn.push(project);
+        }
+        return toReturn;
+    }
+
+    private getProjects(httpClient): Promise<CardWebModel[]> {
+        return new Promise((resolve, reject) => {
+            httpClient.get('/rest/api/2/project?expand=description', (err, jiraRes, body) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(this.transformBodyToCards(body));
             });
         });
     }
 
-    private getProjects(httpClient, callback) {
-        httpClient.get('/rest/api/2/project?expand=description', (err, jiraRes, body) => {
-            var toReturn: CardWebModel[] = [];
-            for(let project of JSON.parse(body)){
-                toReturn.push(this.projectToCardWebModel.apply(project));
-            }
-            callback(toReturn);
-        });
-    }
-
-    private insertEpicsForProjects(projects: CardWebModel[], httpClient, callback){
-        this.jqlService.doRequest(this.prepareEpicJql(), httpClient, (epicJqlRes) => {
-            var toReturn: CardWebModel[] = projects;
-            for(let projectCard of toReturn) {
-                for (let epic of epicJqlRes.issues) {
-                    if(epic.fields.project.id === projectCard.id) {
-                        projectCard.subCards.push(this.epicJqlToCardWebModel.apply(epic));
-                    }
-                }
-            }
-            callback(toReturn);
-        });
-    }
-
-    private prepareEpicJql(): JqlModel {
-        return {
-            request: "type=epic",
-            fields: [
-                "name",
-                "summary",
-                "description",
-                "project"
-            ]
-        };
+    private transformBodyToCards(body: string): CardWebModel[] {
+        let toReturn: CardWebModel[] = new Array();
+        for (let project of JSON.parse(body)) {
+            toReturn.push(this.projectToCardWebModel.apply(project));
+        }
+        return toReturn;
     }
 }

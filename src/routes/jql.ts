@@ -6,8 +6,8 @@
  */
 import * as express from "express";
 import credentials from "../credentials";
-import JqlService from "../service/jqlService";
-import JqlModel from "../model/jqlModel";
+import {JqlService} from "../service/jqlService";
+import {JqlModel} from "../model/jqlModel";
 
 export default (addon) => {
     const router = express.Router();
@@ -21,13 +21,14 @@ export default (addon) => {
                 "name",
                 "summary",
                 "description",
-                "project"
+                "project",
+                "issuetype"
             ]
         };
-        var toReturn = jqlService.doRequest(jqlModel, httpClient, (jqlRes) => {
-            res.send(jqlRes);
+        jqlService.doRequest(jqlModel, httpClient).then((jqlRes) => {
+                res.send(jqlRes);
+            });
         });
-    });
 
     return router;
 };
