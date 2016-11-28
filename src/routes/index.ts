@@ -1,4 +1,5 @@
 import * as express from "express";
+import AuthMiddleware from '../auth/authMiddleware';
 
 // import all the sub-routes
 import projectsRoute from "./projects";
@@ -7,27 +8,29 @@ import cardRoute from "./card";
 import jqlRoute from "./jql";
 
 export default (addon) => {
-    // the main router responsible for handling all requests
-    const router = express.Router();
-    // make the router use all the sub-routes under specified paths
-    router.use("/projects", projectsRoute(addon));
-    router.use("/users", usersRoute(addon));
-    router.use("/card", cardRoute(addon));
-    router.use("/jql", jqlRoute(addon));
+    // a router responsible for handling '/api/*' requests only
+    const apiRouter = express.Router();
 
-    // Serve the main page
-    router.get("/", (req, res) => {
+    // use authMiddleware for '/api/*' requests requests only
+    // any other request does not have to be (and in the case
+    // of /atlassian-connect.json should not be) authenticated
+    const authMiddleware = new AuthMiddleware(addon);
+    apiRouter.use(authMiddleware.getAsExpressMiddleware());
+
+    // make apiRouter use all the sub-routes under specified paths
+    apiRouter.use("/projects", projectsRoute(addon));
+    apiRouter.use("/users", usersRoute(addon));
+    apiRouter.use("/card", cardRoute(addon));
+    apiRouter.use("/jql", jqlRoute(addon));
+
+    const mainRouter = express.Router();
+    // use apiRouter as mainRouter's sub-router
+    mainRouter.use('/api', apiRouter);
+
+    // any non '/api/*' request is handled by mainRouter
+    mainRouter.get("/", (req, res) => {
         res.render("index", { title: "Jira Goggles" });
     });
 
-    // Root route. This route will serve the `atlassian-connect.json` unless the
-    // documentation url inside `atlassian-connect.json` is set
-    // router.get("/", (req, res) => {
-    //     res.format({
-    //         "text/html": () => { res.redirect('/atlassian-connect.json'); },
-    //         "application/json": () => { res.redirect('/atlassian-connect.json'); }
-    //     });
-    // });
-    
-    return router;
+    return mainRouter;
 };

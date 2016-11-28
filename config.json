@@ -2,7 +2,7 @@
     "development": {
         "port": 3000,
         "errorTemplate": false,
-        "localBaseUrl": "https://08af382b.ngrok.io",
+        "localBaseUrl": "https://662c6c22.ngrok.io",
         "store": {
             "adapter": "jugglingdb",
             "type": "sqlite3",
@@ -12,10 +12,11 @@
     "production": {
         "port": "$PORT",
         "errorTemplate": false,
-        "localBaseUrl": "EMPTY FOR NOW",
+        "localBaseUrl": "https://662c6c22.ngrok.io",
         "store": {
-            "type": "postgres",
-            "url": "$DATABASE_URL"
+            "adapter": "jugglingdb",
+            "type": "sqlite3",
+            "database": "store.db"
         },
         "whitelist": [
             "*.jira-dev.com",
