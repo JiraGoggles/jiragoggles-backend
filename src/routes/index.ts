@@ -29,7 +29,7 @@ export default (addon) => {
 
     // any non '/api/*' request is handled by mainRouter
     // a request for the main view '/' has to also pass through authMiddleware
-    mainRouter.get("/", authMiddleware.getAsExpressMiddleware(), (req, res) => {
+    mainRouter.get("/main", authMiddleware.getAsExpressMiddleware(), (req, res) => {
         res.render("index", { title: "Jira Goggles" });
     });
 

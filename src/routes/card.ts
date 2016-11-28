@@ -2,16 +2,17 @@
  * Created by JJax on 19.11.2016.
  */
 import * as express from "express";
-import credentials from "../credentials";
 import {ProjectService} from  "../service/projectService";
+import {getHttpClient} from "../auth/authHelpers";
 
 export default (addon) => {
     const router = express.Router();
-    const httpClient = addon.httpClient(credentials);
-    const projectService = new ProjectService();
 
     router.get('/project', (req, res) => {
-        projectService.getProjectCards(httpClient).then((projectResponse) => {
+        const httpClient = getHttpClient(addon, req);
+        const projectService = new ProjectService(httpClient);
+
+        projectService.getProjectCards().then((projectResponse) => {
             res.setHeader("Content-Type", "application/json");
             res.send(projectResponse);
         });

@@ -9,10 +9,14 @@ import {JqlService} from "./jqlService";
 
 export class EpicService {
     private epicJqlToCardWebModel = new EpicJqlToCardWebModel();
-    private jqlService = new JqlService();
+    private jqlService;
 
-    public async getEpicsWithParentId(httpClient) : Promise<Dictionary<CardWebModel[]>> {
-        let epics = await this.getEpics(httpClient);
+    constructor(private httpClient) {
+        this.jqlService = new JqlService(httpClient);
+    }
+
+    public async getEpicsWithParentId() : Promise<Dictionary<CardWebModel[]>> {
+        let epics = await this.getEpics();
         return new Promise<any>((resolve, reject) => {
             var toReturn: Dictionary<CardWebModel[]> = {};
             for (let epic of epics.issues) {
@@ -26,8 +30,8 @@ export class EpicService {
         });
     }
 
-    private getEpics(httpClient) : Promise<any> {
-        return this.jqlService.doRequest(this.prepareEpicJql(), httpClient);
+    private getEpics() : Promise<any> {
+        return this.jqlService.doRequest(this.prepareEpicJql());
     }
 
     private prepareEpicJql(): JqlModel {
