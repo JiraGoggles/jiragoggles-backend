@@ -1,4 +1,4 @@
-import {EpicJqlToCardWebModel} from "../converter/epicJqlToCardWebModel";
+import {JqlToCardWebModel} from "../converter/jqlToCardWebModel";
 import {CardWebModel} from "../model/cardWebModel";
 import {Dictionary} from "../commons/dictionary";
 import {JqlModel} from "../model/jqlModel";
@@ -8,7 +8,7 @@ import {JqlService} from "./jqlService";
  */
 
 export class EpicService {
-    private epicJqlToCardWebModel = new EpicJqlToCardWebModel();
+    private jqlToCardWebModel = new JqlToCardWebModel();
     private jqlService = new JqlService();
 
     public async getEpicsWithParentId(httpClient) : Promise<Dictionary<CardWebModel[]>> {
@@ -20,7 +20,7 @@ export class EpicService {
                 if (!toReturn[projectId]) {
                     toReturn[projectId] = [];
                 }
-                toReturn[projectId].push(this.epicJqlToCardWebModel.apply(epic));
+                toReturn[projectId].push(this.jqlToCardWebModel.apply(epic));
             }
             resolve(toReturn);
         });
