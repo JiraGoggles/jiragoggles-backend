@@ -11,7 +11,7 @@ export default (addon) => {
     // a router responsible for handling '/api/*' requests only
     const apiRouter = express.Router();
 
-    // use authMiddleware for '/api/*' requests requests only
+    // use authMiddleware for '/api/*' (and '/' explained below) requests only
     // any other request does not have to be (and in the case
     // of /atlassian-connect.json should not be) authenticated
     const authMiddleware = new AuthMiddleware(addon);
@@ -28,7 +28,8 @@ export default (addon) => {
     mainRouter.use('/api', apiRouter);
 
     // any non '/api/*' request is handled by mainRouter
-    mainRouter.get("/", (req, res) => {
+    // a request for the main view '/' has to also pass through authMiddleware
+    mainRouter.get("/", authMiddleware.getAsExpressMiddleware(), (req, res) => {
         res.render("index", { title: "Jira Goggles" });
     });
 

@@ -25,7 +25,7 @@ export default class AuthMiddleware {
         }
         else {
             return (request, response, nextMiddleware) => {
-                this.addonMiddleware(request, request, nextMiddleware);
+                this.addonMiddleware(request, response, nextMiddleware);
             };
         }
     }
@@ -37,7 +37,7 @@ export default class AuthMiddleware {
             if (credentials) {
                 this.addCredentialsToRequest(request, credentials);
             }
-            else {
+            else { // if the credentials haven't been found in the database, resort to hardcodedCredentials
                 this.addCredentialsToRequest(request, AuthMiddleware.hardcodedCredentials);
             }
         }
