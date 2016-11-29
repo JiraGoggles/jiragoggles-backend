@@ -14,21 +14,21 @@ export class EpicService {
     private jqlService = new JqlService();
     private customFieldService = new CustomFieldService();
     private issueService = new IssueService();
+    private fields: ["name","summary","description","project","issuetype"];
 
-    public async getEpicCards(httpClient): Promise<CardWebModel[]> {
+    public async getEpicsForProjectCards(key: string, httpClient): Promise<CardWebModel[]> {
         var [epics, customField] = await Promise.all([
-            this.getEpics(httpClient),
+            this.getEpicsForProjectKey(key, httpClient),
             this.customFieldService.getCustomFields("Epic Link", httpClient)]);
 
         var issuesWithParentKeys = await this.issueService.getIssuesWithParentKeys(
-            this.getParentIds(epics), customField, httpClient);
+            this.getKeyList(epics), customField, httpClient);
 
         return new Promise<CardWebModel[]>((resolve, reject) => {
             var toReturn: CardWebModel[] = [];
             for (let epic of epics) {
-                var card = this.jqlToCardWebModel.apply(epic);
-                card.subCards = issuesWithParentKeys[card.key];
-                toReturn.push(card);
+                epic.subCards = issuesWithParentKeys[epic.key];
+                toReturn.push(epic);
             }
             resolve(toReturn);
         });
@@ -49,12 +49,24 @@ export class EpicService {
         });
     }
 
-    private getParentIds(body): number[] {
-        var toReturn: number[] = [];
-        for (let issue of body.issues) {
-            toReturn.push(issue.key);
+    private getKeyList(cards: CardWebModel[]): string[] {
+        var toReturn: string[] = [];
+        for (let card of cards) {
+            toReturn.push(card.key);
         }
         return toReturn;
+    }
+
+    private async getEpicsForProjectKey(key: string, httpClient): Promise<CardWebModel[]> {
+        var epics = await this.jqlService.doRequest(this.prepareEpicsForProjectJql(key), httpClient);
+
+        return new Promise<CardWebModel[]>((resolve, reject) => {
+            var toReturn: CardWebModel[] = [];
+            for(let epic of epics.issues) {
+                toReturn.push(this.jqlToCardWebModel.apply(epic));
+            }
+            resolve(toReturn);
+        });
     }
 
     private getEpics(httpClient): Promise<any> {
@@ -64,13 +76,14 @@ export class EpicService {
     private prepareEpicJql(): JqlModel {
         return {
             request: `"Epic Link" is EMPTY AND type not in subtaskIssueTypes()`,
-            fields: [
-                "name",
-                "summary",
-                "description",
-                "project",
-                "issuetype"
-            ]
+            fields: this.fields
+        };
+    }
+
+    private prepareEpicsForProjectJql(key: string): JqlModel {
+        return {
+            request: `"Epic Link" is EMPTY AND type not in subtaskIssueTypes() AND project =` + key,
+            fields: this.fields
         };
     }
 }

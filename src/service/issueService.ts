@@ -11,9 +11,9 @@ export class IssueService {
     private jqlService = new JqlService();
     private jqlToCardWebModel = new JqlToCardWebModel();
 
-    public async getIssuesWithParentKeys(id: number[], epicCustomField: string, httpClient)
+    public async getIssuesWithParentKeys(key: string[], epicCustomField: string, httpClient)
     : Promise<Dictionary<CardWebModel[]>> {
-        var issueBody = await this.getIssuesForIds(id, epicCustomField, httpClient);
+        var issueBody = await this.getIssuesForKeys(key, epicCustomField, httpClient);
         var toReturn: Dictionary<CardWebModel[]> = {};
 
         return new Promise<any>((resolve, reject) => {
@@ -41,14 +41,14 @@ export class IssueService {
         }
     }
 
-    private getIssuesForIds(id: number[], epicCustomField: string, httpClient): Promise<any> {
-        var request = this.prepareJqlRequestForIssues(id, epicCustomField);
+    private getIssuesForKeys(key: string[], epicCustomField: string, httpClient): Promise<any> {
+        var request = this.prepareJqlRequestForIssues(key, epicCustomField);
         return this.jqlService.doRequest(request, httpClient);
     }
 
-    private prepareJqlRequestForIssues(id: number[], epicCustomField: string): JqlModel {
+    private prepareJqlRequestForIssues(key: string[], epicCustomField: string): JqlModel {
         return {
-            request: `"Epic Link" in (` + id + `) OR parent in (` + id + `) ORDER BY created`,
+            request: `"Epic Link" in (` + key + `) OR parent in (` + key + `) ORDER BY created`,
             fields: [
                 "summary",
                 "description",
