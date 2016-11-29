@@ -7,8 +7,7 @@
     "dev": "NODE_ENV=development nodemon www.js",
     "prod": "NODE_ENV=production nodemon www.js",
     "win-dev": "set NODE_ENV=development && nodemon www.js",
-    "win-prod": "set NODE_ENV=production && nodemon www.js",
-    "webstorm-debug": "NODE_ENV=development node www.js"
+    "win-prod": "set NODE_ENV=production && nodemon www.js"
   },
   "keywords": [],
   "author": "",

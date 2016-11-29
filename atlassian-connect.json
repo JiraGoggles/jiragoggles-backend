@@ -1,11 +1,7 @@
 {
-    "key": "jira-activity",
-    "name": "JIRA Project Activity",
-    "description": "A Connect add-on that displays JIRA projects in a table",
-    "vendor": {
-        "name": "Atlassian Developer Relations",
-        "url": "https://developer.atlassian.com/"
-    },
+    "key": "jira-goggles",
+    "name": "JIRA Goggles",
+    "description": "An add-on that helps managing JIRA projects",
     "baseUrl": "{{localBaseUrl}}",
     "links": {
         "self": "{{localBaseUrl}}/atlassian-connect.json",
@@ -26,10 +22,10 @@
         "generalPages": [
 
             {
-                "key": "activity",
+                "key": "jira-goggles",
                 "location": "system.top.navigation.bar",
                 "name": {
-                    "value": "Activity"
+                    "value": "Jira Goggles"
                 },
                 "url": "/main",
                 "conditions": [{

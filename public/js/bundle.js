@@ -1,6 +1,10 @@
 $(function() {
+    //extract the token from the meta element
+    var token = $('meta[name=token]').attr("content");
+    if (!token) token = "example-token";
+
     $.ajax({
-        url: "/users/myself",
+        url: "/api/users/myself?jwt=" + token,
         contentType: "application/json",
         success: function(response) {
             // convert the string response to JSON
