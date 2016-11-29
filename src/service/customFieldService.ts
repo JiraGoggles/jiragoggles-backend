@@ -4,9 +4,9 @@
 
 export class CustomFieldService {
 
-    public async getCustomFields(fieldName: String, httpClient): Promise<String> {
+    public async getCustomFields(fieldName: String, httpClient): Promise<string> {
         var fields = await this.getAllFields(httpClient);
-        return new Promise<String>((resolve, reject) => {
+        return new Promise<string>((resolve, reject) => {
             var toReturn = fields.filter((x) => {
                 return x.name.toUpperCase().toString() === fieldName.toUpperCase();
             });
