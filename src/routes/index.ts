@@ -1,7 +1,5 @@
 import * as express from "express";
 import AuthMiddleware from '../auth/authMiddleware';
-
-// import all the sub-routes
 import projectsRoute from "./projects";
 import usersRoute from "./users";
 import cardRoute from "./card";

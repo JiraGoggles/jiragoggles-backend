@@ -2,7 +2,7 @@ import {CardWebModel} from "../model/cardWebModel";
 /**
  * Created by JJax on 20.11.2016.
  */
-export class EpicJqlToCardWebModel {
+export class JqlToCardWebModel {
     public apply(epicJql): CardWebModel {
         return {
             id: epicJql.id,

@@ -1,13 +1,11 @@
-/**
- * Created by JJax on 19.11.2016.
- */
-/**
- * Created by JJax on 19.11.2016.
- */
 import * as express from "express";
 import {JqlService} from "../service/jqlService";
 import {JqlModel} from "../model/jqlModel";
 import {getHttpClient} from "../auth/authHelpers";
+
+/**
+ * Created by JJax on 19.11.2016.
+ */
 
 export default (addon) => {
     const router = express.Router();
