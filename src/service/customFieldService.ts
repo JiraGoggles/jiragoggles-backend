@@ -3,9 +3,11 @@
  */
 
 export class CustomFieldService {
+    constructor(private httpClient) {
+    }
 
-    public async getCustomFields(fieldName: String, httpClient): Promise<string> {
-        var fields = await this.getAllFields(httpClient);
+    public async getCustomFields(fieldName: String): Promise<string> {
+        var fields = await this.getAllFields();
         return new Promise<string>((resolve, reject) => {
             var toReturn = fields.filter((x) => {
                 return x.name.toUpperCase().toString() === fieldName.toUpperCase();
@@ -19,9 +21,9 @@ export class CustomFieldService {
         });
     }
 
-    private getAllFields(httpClient): Promise<any> {
+    private getAllFields(): Promise<any> {
         return new Promise((resolve, reject) => {
-            httpClient.get({url: "rest/api/2/field"},
+            this.httpClient.get({url: "rest/api/2/field"},
                 (err, jiraRes, body) => {
                     if (err) {
                         reject(err);

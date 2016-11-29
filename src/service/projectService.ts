@@ -1,5 +1,4 @@
 import {CardWebModel} from "../model/cardWebModel";
-import {JqlService} from "./jqlService";
 import {ProjectToCardWebModel} from "../converter/projectToCardWebModel";
 import {Dictionary} from "../commons/dictionary";
 import {EpicAsChildService} from "./epicAsChildService";
@@ -10,11 +9,15 @@ import {EpicAsChildService} from "./epicAsChildService";
 
 export class ProjectService {
     private projectToCardWebModel = new ProjectToCardWebModel();
-    private epicAsChildService = new EpicAsChildService();
+    private epicAsChildService;
 
-    public async getProjectCards(httpClient): Promise<CardWebModel[]> {
-        let [epicsWithParentId, projects] = await Promise.all([this.epicAsChildService.getEpicsWithParentId(httpClient),
-            this.getProjects(httpClient)]);
+    constructor(private httpClient) {
+        this.epicAsChildService = new EpicAsChildService(httpClient);
+    }
+
+    public async getProjectCards(): Promise<CardWebModel[]> {
+        let [epicsWithParentId, projects] = await Promise.all([this.epicAsChildService.getEpicsWithParentId(),
+            this.getProjects()]);
         return new Promise<any>((resolve, reject) => {
             resolve(this.insertEpicsToProjects(epicsWithParentId, projects));
         });
@@ -29,9 +32,9 @@ export class ProjectService {
         return toReturn;
     }
 
-    private getProjects(httpClient): Promise<CardWebModel[]> {
+    private getProjects(): Promise<CardWebModel[]> {
         return new Promise((resolve, reject) => {
-            httpClient.get('/rest/api/2/project?expand=description', (err, jiraRes, body) => {
+            this.httpClient.get('/rest/api/2/project?expand=description', (err, jiraRes, body) => {
                 if (err) {
                     reject(err);
                 }

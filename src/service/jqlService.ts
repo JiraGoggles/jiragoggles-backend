@@ -1,4 +1,5 @@
 import {JqlModel} from "../model/jqlModel";
+
 /**
  * Created by JJax on 19.11.2016.
  */
@@ -6,9 +7,12 @@ import {JqlModel} from "../model/jqlModel";
 const MAX_RESULTS = -1;
 
 export class JqlService {
-    public doRequest(jqlModel: JqlModel, httpClient): Promise<any> {
+    constructor(private httpClient) {
+    }
+
+    public doRequest(jqlModel: JqlModel): Promise<any> {
         return new Promise((resolve, reject) => {
-            httpClient.post({url: "/rest/api/2/search", json: this.prepareRequestBody(jqlModel)},
+            this.httpClient.post({url: "/rest/api/2/search", json: this.prepareRequestBody(jqlModel)},
                 (err, jiraRes, body) => {
                     if (err) {
                         reject(err);

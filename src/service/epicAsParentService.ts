@@ -4,25 +4,32 @@ import {CardWebModel} from "../model/cardWebModel";
 import {JqlToCardWebModel} from "../converter/jqlToCardWebModel";
 import {CustomFieldService} from "./customFieldService";
 import {IssueService} from "./issueService";
+
 /**
  * Created by JJax on 29.11.2016.
  */
 
 export class EpicAsParentService {
     private fields: ["name","summary","description","project","issuetype"];
-    private jqlService = new JqlService();
     private jqlToCardWebModel = new JqlToCardWebModel();
-    private customFieldService = new CustomFieldService();
-    private issueService = new IssueService();
     private readonly EPIC_FIELD_NAME = "Epic Link";
+    private jqlService;
+    private customFieldService;
+    private issueService;
 
-    public async getEpicCardsForProjectKey(key: string, httpClient): Promise<CardWebModel[]> {
+    constructor(private httpClient) {
+        this.jqlService = new JqlService(httpClient);
+        this.customFieldService = new CustomFieldService(httpClient);
+        this.issueService = new IssueService(httpClient);
+    }
+
+    public async getEpicCardsForProjectKey(key: string): Promise<CardWebModel[]> {
         var [epics, customField] = await Promise.all([
-            this.getEpicsForProjectKey(key, httpClient),
-            this.customFieldService.getCustomFields(this.EPIC_FIELD_NAME, httpClient)]);
+            this.getEpicsForProjectKey(key),
+            this.customFieldService.getCustomFields(this.EPIC_FIELD_NAME)]);
 
         var issuesWithParentKeys = await this.issueService.getIssuesWithParentKeys(
-            this.getKeyList(epics), customField, httpClient);
+            this.getKeyList(epics), customField);
 
         return new Promise<CardWebModel[]>((resolve, reject) => {
             var toReturn: CardWebModel[] = [];
@@ -34,8 +41,8 @@ export class EpicAsParentService {
         });
     }
 
-    private async getEpicsForProjectKey(key: string, httpClient): Promise<CardWebModel[]> {
-        var epics = await this.jqlService.doRequest(this.prepareEpicsForProjectJql(key), httpClient);
+    private async getEpicsForProjectKey(key: string): Promise<CardWebModel[]> {
+        var epics = await this.jqlService.doRequest(this.prepareEpicsForProjectJql(key));
 
         return new Promise<CardWebModel[]>((resolve, reject) => {
             var toReturn: CardWebModel[] = [];

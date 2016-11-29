@@ -1,19 +1,24 @@
-import {JqlService} from "./jqlService";
 import {JqlModel} from "../model/jqlModel";
 import {Dictionary} from "../commons/dictionary";
 import {CardWebModel} from "../model/cardWebModel";
 import {JqlToCardWebModel} from "../converter/jqlToCardWebModel";
+import {JqlService} from "./jqlService";
+
 /**
  * Created by JJax on 28.11.2016.
  */
 
 export class IssueService {
-    private jqlService = new JqlService();
     private jqlToCardWebModel = new JqlToCardWebModel();
+    private jqlService;
 
-    public async getIssuesWithParentKeys(key: string[], epicCustomField: string, httpClient)
+    constructor(private httpClient) {
+        this.jqlService = new JqlService(httpClient);
+    }
+
+    public async getIssuesWithParentKeys(key: string[], epicCustomField: string)
     : Promise<Dictionary<CardWebModel[]>> {
-        var issueBody = await this.getIssuesForKeys(key, epicCustomField, httpClient);
+        var issueBody = await this.getIssuesForKeys(key, epicCustomField);
         var toReturn: Dictionary<CardWebModel[]> = {};
 
         return new Promise<any>((resolve, reject) => {
@@ -41,9 +46,9 @@ export class IssueService {
         }
     }
 
-    private getIssuesForKeys(key: string[], epicCustomField: string, httpClient): Promise<any> {
+    private getIssuesForKeys(key: string[], epicCustomField: string): Promise<any> {
         var request = this.prepareJqlRequestForIssues(key, epicCustomField);
-        return this.jqlService.doRequest(request, httpClient);
+        return this.jqlService.doRequest(request);
     }
 
     private prepareJqlRequestForIssues(key: string[], epicCustomField: string): JqlModel {

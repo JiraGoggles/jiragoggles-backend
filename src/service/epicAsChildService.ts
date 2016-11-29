@@ -3,17 +3,22 @@ import {CardWebModel} from "../model/cardWebModel";
 import {Dictionary} from "../commons/dictionary";
 import {JqlModel} from "../model/jqlModel";
 import {JqlService} from "./jqlService";
+
 /**
  * Created by JJax on 23.11.2016.
  */
 
 export class EpicAsChildService {
     private jqlToCardWebModel = new JqlToCardWebModel();
-    private jqlService = new JqlService();
     private fields: ["name","summary","description","project","issuetype"];
+    private jqlService;
 
-    public async getEpicsWithParentId(httpClient): Promise<Dictionary<CardWebModel[]>> {
-        let epics = await this.getEpics(httpClient);
+    constructor(private httpClient) {
+        this.jqlService = new JqlService(httpClient);
+    }
+
+    public async getEpicsWithParentId(): Promise<Dictionary<CardWebModel[]>> {
+        let epics = await this.getEpics();
         return new Promise<any>((resolve, reject) => {
             var toReturn: Dictionary<CardWebModel[]> = {};
             for (let epic of epics.issues) {
@@ -27,8 +32,8 @@ export class EpicAsChildService {
         });
     }
 
-    private getEpics(httpClient): Promise<any> {
-        return this.jqlService.doRequest(this.prepareEpicJql(), httpClient);
+    private getEpics(): Promise<any> {
+        return this.jqlService.doRequest(this.prepareEpicJql());
     }
 
     private prepareEpicJql(): JqlModel {
