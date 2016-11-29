@@ -2,19 +2,18 @@ import {CardWebModel} from "../model/cardWebModel";
 import {JqlService} from "./jqlService";
 import {ProjectToCardWebModel} from "../converter/projectToCardWebModel";
 import {Dictionary} from "../commons/dictionary";
-import {EpicService} from "./epicService";
+import {EpicAsChildService} from "./epicAsChildService";
 
 /**
  * Created by JJax on 19.11.2016.
  */
 
 export class ProjectService {
-    private jqlService = new JqlService();
     private projectToCardWebModel = new ProjectToCardWebModel();
-    private epicService = new EpicService();
+    private epicAsChildService = new EpicAsChildService();
 
     public async getProjectCards(httpClient): Promise<CardWebModel[]> {
-        let [epicsWithParentId, projects] = await Promise.all([this.epicService.getEpicsWithParentId(httpClient),
+        let [epicsWithParentId, projects] = await Promise.all([this.epicAsChildService.getEpicsWithParentId(httpClient),
             this.getProjects(httpClient)]);
         return new Promise<any>((resolve, reject) => {
             resolve(this.insertEpicsToProjects(epicsWithParentId, projects));
