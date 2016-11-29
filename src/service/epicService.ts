@@ -27,7 +27,7 @@ export class EpicService {
         return new Promise<CardWebModel[]>((resolve, reject) => {
             var toReturn: CardWebModel[] = [];
             for (let epic of epics) {
-                epic.subCards = issuesWithParentKeys[epic.key];
+                epic.subCards = issuesWithParentKeys[epic.key] ? issuesWithParentKeys[epic.key] : [];
                 toReturn.push(epic);
             }
             resolve(toReturn);
