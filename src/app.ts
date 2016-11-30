@@ -80,7 +80,7 @@ class Server {
     this.app.use(this.addon.middleware());
 
     // set up the routes/controllers
-    // pass the addon to facilitate authentication
+    // pass the addon to enable authentication
     this.app.use(mainRouter(this.addon));
   }
 }
