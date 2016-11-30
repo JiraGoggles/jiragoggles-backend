@@ -1,3 +1,13 @@
 .idea
 .tscache
 node_modules
+auth/*.js
+auth/*.js.map
+commons/*.js*
+converter/*.js*
+credentials.js
+model/*.js*
+routes/*.js*
+service/*.js*
+store.db
+www.js
