@@ -8,7 +8,7 @@ import {JqlService} from "./jqlService";
  * Created by JJax on 28.11.2016.
  */
 
-export class IssueService {
+export class ProjectChildrensService {
     private jqlToCardWebModel = new JqlToCardWebModel();
     private jqlService;
 
@@ -16,29 +16,29 @@ export class IssueService {
         this.jqlService = new JqlService(httpClient);
     }
 
-    public async getIssuesWithParentKeys(key: string[], epicCustomField: string)
+    public async getIssuesWithParentKeys(parentKey: string[], epicCustomField: string)
     : Promise<Dictionary<CardWebModel[]>> {
-        var issueBody = await this.getIssuesForKeys(key, epicCustomField);
+        var issueBody = await this.getIssuesForKeys(parentKey, epicCustomField);
         var toReturn: Dictionary<CardWebModel[]> = {};
 
         return new Promise<any>((resolve, reject) => {
             for(let issue of issueBody.issues){
                 var issueCard: CardWebModel = this.jqlToCardWebModel.apply(issue);
-                var parentId: number = this.getParentKey(issue, epicCustomField);
-                if(!parentId){
+                var parentKey: string = this.getParentKey(issue, epicCustomField);
+                if(!parentKey){
                     reject("No parent id error");
                 }
 
-                if(!toReturn[parentId]){
-                    toReturn[parentId] = [];
+                if(!toReturn[parentKey]){
+                    toReturn[parentKey] = [];
                 }
-                toReturn[parentId].push(issueCard);
+                toReturn[parentKey].push(issueCard);
             }
             resolve(toReturn);
         });
     }
 
-    private getParentKey(issue, customFieldName): number {
+    private getParentKey(issue, customFieldName): string {
         if(issue.fields.parent){
             return issue.fields.parent.key;
         } else if(issue.fields[customFieldName]) {

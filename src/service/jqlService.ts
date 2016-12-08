@@ -4,9 +4,9 @@ import {JqlModel} from "../model/jqlModel";
  * Created by JJax on 19.11.2016.
  */
 
-const MAX_RESULTS = -1;
-
 export class JqlService {
+    private readonly  MAX_RESULTS = -1;
+
     constructor(private httpClient) {
     }
 
@@ -22,11 +22,18 @@ export class JqlService {
         });
     }
 
+    public prepareJqlRequest(request: string, fields: string[]) : JqlModel {
+        return {
+            request: request,
+            fields: fields
+        };
+    }
+
     private prepareRequestBody(jqlModel: JqlModel) {
         return {
             jql: jqlModel.request,
             startAt: 0,
-            maxResults: MAX_RESULTS,
+            maxResults: this.MAX_RESULTS,
             fields: jqlModel.fields,
             "fieldsByKeys": false
         };
