@@ -1,7 +1,5 @@
 import * as express from "express";
 import AuthMiddleware from '../auth/authMiddleware';
-import projectsRoute from "./projects";
-import usersRoute from "./users";
 import cardRoute from "./card";
 import jqlRoute from "./jql";
 
@@ -16,8 +14,6 @@ export default (addon) => {
     apiRouter.use(authMiddleware.getAsExpressMiddleware());
 
     // make apiRouter use all the sub-routes under specified paths
-    apiRouter.use("/projects", projectsRoute(addon));
-    apiRouter.use("/users", usersRoute(addon));
     apiRouter.use("/card", cardRoute(addon));
     apiRouter.use("/jql", jqlRoute(addon));
 
