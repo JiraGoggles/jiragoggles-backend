@@ -11,7 +11,9 @@ import {ParentChildrenCardConnector} from "../commons/parentChildrenCardConnecto
 
 export class EpicService {
     private readonly JQL_REQUEST = `"Epic Link"=`;
+    private readonly JQL_OTHER_EPICS_REQUEST = `type in standardIssueTypes() AND type != Epic AND "Epic Link" is EMPTY AND project =`;
     private readonly JQL_FIELDS = ["name", "summary", "description", "project", "issuetype", "status", "priority", "subtasks"];
+    private readonly OTHER_EPIC_NAME = "OTHERS";
     private transfromUtils = new TransformUtils();
     private jqlToCardWebModel = new JqlToCardWebModel();
     private cardConnector = new ParentChildrenCardConnector();
@@ -22,8 +24,10 @@ export class EpicService {
         this.jqlService = new JqlService(httpClient);
     }
 
-    public async getEpicCards(epic_key: string) : Promise<CardWebModel[]> {
-        var stories = await this.jqlService.doRequest(this.prepareRequest(epic_key));
+    public async getEpicCards(projectKey: string, epicKey: string) : Promise<CardWebModel[]> {
+        var request = epicKey === this.OTHER_EPIC_NAME ? this.prepareRequestForOthers(projectKey) :
+            this.prepareRequest(epicKey);
+        var stories = await this.jqlService.doRequest(request);
 
         return new Promise<CardWebModel[]>((resolve) => {
             var childrensWithParentId = this.getChildrensWithParentId(stories);
@@ -41,7 +45,11 @@ export class EpicService {
         return toReturn;
     }
 
-    private prepareRequest(epic_key: string) : JqlModel {
-        return this.jqlService.prepareJqlRequest(this.JQL_REQUEST + epic_key, this.JQL_FIELDS);
+    private prepareRequest(epicKey: string) : JqlModel {
+        return this.jqlService.prepareJqlRequest(this.JQL_REQUEST + epicKey, this.JQL_FIELDS);
+    }
+
+    private prepareRequestForOthers(projectKey: string): JqlModel {
+        return this.jqlService.prepareJqlRequest(this.JQL_OTHER_EPICS_REQUEST + projectKey, this.JQL_FIELDS);
     }
 }
