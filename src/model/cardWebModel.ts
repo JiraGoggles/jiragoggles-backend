@@ -3,7 +3,7 @@ import {Dictionary} from "../commons/dictionary";
  * Created by JJax on 19.11.2016.
  */
 
-export interface CardWebModel {
+export class CardWebModel {
     id: number;
     key: string;
     name: string;
