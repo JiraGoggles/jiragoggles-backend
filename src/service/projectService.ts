@@ -35,8 +35,9 @@ export class ProjectService {
             var toReturnCards = this.cardConnector.apply(epics, epicsChildrens, "key");
             var otherParentCard: CardWebModel = <CardWebModel> {
                 subCards: others,
-                key: "SH-others",
+                key: "OTHERS",
                 type: "Epic",
+                name: "Others"
             };
             toReturnCards.push(otherParentCard);
 
