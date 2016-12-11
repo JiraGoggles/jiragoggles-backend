@@ -1,8 +1,9 @@
 import {CardWebModel} from "../model/cardWebModel";
+import {Converter} from "./converter";
 /**
  * Created by JJax on 20.11.2016.
  */
-export class ProjectToCardWebModel {
+export class ProjectToCardWebModel implements Converter<CardWebModel>{
 
     public apply(project): CardWebModel {
         return {

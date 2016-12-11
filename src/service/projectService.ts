@@ -1,53 +1,64 @@
+import {JqlModel} from "../model/jqlModel";
+import {JqlService} from "./jqlService";
 import {CardWebModel} from "../model/cardWebModel";
-import {ProjectToCardWebModel} from "../converter/projectToCardWebModel";
-import {Dictionary} from "../commons/dictionary";
-import {EpicAsChildService} from "./epicAsChildService";
+import {JqlToCardWebModel} from "../converter/jqlToCardWebModel";
+import {CustomFieldService} from "./customFieldService";
+import {ProjectChildrensService} from "./projectChildrensService";
+import {ParentChildrenCardConnector} from "../commons/parentChildrenCardConnector";
+import {TransformUtils} from "../commons/transformUtils";
 
 /**
- * Created by JJax on 19.11.2016.
+ * Created by JJax on 29.11.2016.
  */
 
 export class ProjectService {
-    private projectToCardWebModel = new ProjectToCardWebModel();
-    private epicAsChildService;
+    private readonly EPIC_FIELD_NAME = "Epic Link";
+    private JQL_FIELDS: ["name","summary","description","project","issuetype"];
+    private readonly JQL_REQUEST = `"Epic Link" is EMPTY AND type not in subtaskIssueTypes() AND project =`;
+    private jqlToCardWebModel = new JqlToCardWebModel();
+    private cardConnector = new ParentChildrenCardConnector();
+    private transformUtils = new TransformUtils();
+    private jqlService;
+    private customFieldService;
+    private issueService;
 
     constructor(private httpClient) {
-        this.epicAsChildService = new EpicAsChildService(httpClient);
+        this.jqlService = new JqlService(httpClient);
+        this.customFieldService = new CustomFieldService(httpClient);
+        this.issueService = new ProjectChildrensService(httpClient);
     }
 
-    public async getProjectCards(): Promise<CardWebModel[]> {
-        let [epicsWithParentId, projects] = await Promise.all([this.epicAsChildService.getEpicsWithParentId(),
-            this.getProjects()]);
-        return new Promise<any>((resolve, reject) => {
-            resolve(this.insertEpicsToProjects(epicsWithParentId, projects));
+    public async getProjectCards(projectKey: string): Promise<CardWebModel[]> {
+        var [epics, customField] = await Promise.all([
+            this.getEpicsOfProject(projectKey),
+            this.customFieldService.getCustomFields(this.EPIC_FIELD_NAME)]);
+
+        var issuesWithParentKeys = await this.issueService.getIssuesWithParentKeys(
+            this.getKeyList(epics), customField);
+
+        return new Promise<CardWebModel[]>((resolve, reject) => {
+            resolve(this.cardConnector.apply(epics, issuesWithParentKeys, "key"));
         });
     }
 
-    private insertEpicsToProjects(epics: Dictionary<CardWebModel[]>, projects: CardWebModel[]): CardWebModel[] {
-        var toReturn: CardWebModel[] = new Array();
-        for (let project of projects) {
-            project.subCards = epics[project.id];
-            toReturn.push(project);
+    private async getEpicsOfProject(key: string): Promise<CardWebModel[]> {
+        var epics = await this.jqlService.doRequest(this.prepareEpicsForProjectJql(key));
+
+        return new Promise<CardWebModel[]>((resolve, reject) => {
+            let toReturn = this.transformUtils.transform<CardWebModel>(epics.issues, this.jqlToCardWebModel);
+            resolve(toReturn);
+        });
+    }
+
+    private getKeyList(cards: CardWebModel[]): string[] {
+        var toReturn: string[] = [];
+        for (let card of cards) {
+            toReturn.push(card.key);
         }
         return toReturn;
     }
 
-    private getProjects(): Promise<CardWebModel[]> {
-        return new Promise((resolve, reject) => {
-            this.httpClient.get('/rest/api/2/project?expand=description', (err, jiraRes, body) => {
-                if (err) {
-                    reject(err);
-                }
-                resolve(this.transformBodyToCards(body));
-            });
-        });
-    }
-
-    private transformBodyToCards(body: string): CardWebModel[] {
-        let toReturn: CardWebModel[] = new Array();
-        for (let project of JSON.parse(body)) {
-            toReturn.push(this.projectToCardWebModel.apply(project));
-        }
-        return toReturn;
+    private prepareEpicsForProjectJql(key: string): JqlModel {
+        return this.jqlService.prepareJqlRequest(this.JQL_REQUEST + key, this.JQL_FIELDS);
     }
 }

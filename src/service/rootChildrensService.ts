@@ -8,9 +8,10 @@ import {JqlService} from "./jqlService";
  * Created by JJax on 23.11.2016.
  */
 
-export class EpicAsChildService {
+export class RootChildrensService {
     private jqlToCardWebModel = new JqlToCardWebModel();
-    private fields: ["name","summary","description","project","issuetype"];
+    private readonly jqlRequest = `"Epic Link" is EMPTY AND type not in subtaskIssueTypes()`;
+    private readonly jqlFields: ["name","summary","description","project","issuetype"];
     private jqlService;
 
     constructor(private httpClient) {
@@ -18,7 +19,7 @@ export class EpicAsChildService {
     }
 
     public async getEpicsWithParentId(): Promise<Dictionary<CardWebModel[]>> {
-        let epics = await this.getEpics();
+        let epics = await this.doGetEpics();
         return new Promise<any>((resolve, reject) => {
             var toReturn: Dictionary<CardWebModel[]> = {};
             for (let epic of epics.issues) {
@@ -32,14 +33,11 @@ export class EpicAsChildService {
         });
     }
 
-    private getEpics(): Promise<any> {
+    private doGetEpics(): Promise<any> {
         return this.jqlService.doRequest(this.prepareEpicJql());
     }
 
     private prepareEpicJql(): JqlModel {
-        return {
-            request: `"Epic Link" is EMPTY AND type not in subtaskIssueTypes()`,
-            fields: this.fields
-        };
+        return this.jqlService.prepareJqlRequest(this.jqlRequest, this.jqlFields);
     }
 }
