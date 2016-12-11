@@ -10,7 +10,7 @@ import {JqlService} from "./jqlService";
 
 export class RootChildrensService {
     private jqlToCardWebModel = new JqlToCardWebModel();
-    private readonly jqlRequest = `"Epic Link" is EMPTY AND type not in subtaskIssueTypes()`;
+    private readonly jqlRequest = `"Epic Link" is EMPTY AND type = epic`;
     private readonly jqlFields: ["name","summary","description","project","issuetype"];
     private jqlService;
 
