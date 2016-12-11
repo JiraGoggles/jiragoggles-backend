@@ -1,6 +1,5 @@
 import {CardWebModel} from "../model/cardWebModel";
 import {ProjectToCardWebModel} from "../converter/projectToCardWebModel";
-import {Dictionary} from "../commons/dictionary";
 import {RootChildrensService} from "./rootChildrensService";
 import {ParentChildrenCardConnector} from "../commons/parentChildrenCardConnector";
 import {TransformUtils} from "../commons/transformUtils";

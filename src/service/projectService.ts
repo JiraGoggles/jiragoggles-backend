@@ -13,6 +13,7 @@ import {Dictionary} from "../commons/dictionary";
 export class ProjectService {
     private readonly EPIC_FIELD_NAME = "Epic Link";
     private readonly JQL_REQUEST = `issuetype != Sub-task and  project = `;
+    private issueJqlToCardWebModel = new JqlToCardWebModel();
     private jqlToCardWebModel = new JqlToCardWebModel();
     private cardConnector = new ParentChildrenCardConnector();
     private jqlService;
@@ -72,14 +73,14 @@ export class ProjectService {
                 if (!toReturn[issue.fields[epicLinkFieldName]]) {
                     toReturn[issue.fields[epicLinkFieldName]] = [];
                 }
-                toReturn[issue.fields[epicLinkFieldName]].push(this.jqlToCardWebModel.apply(issue));
+                toReturn[issue.fields[epicLinkFieldName]].push(this.issueJqlToCardWebModel.apply(issue));
             }
         }
         return toReturn;
     }
 
     private prepareEpicsForProjectJql(projectKey: string, epicLinkFieldName: string): JqlModel {
-        let jqlFields = ["name", "summary", "description", "project", "issuetype", epicLinkFieldName];
+        let jqlFields = ["name", "summary", "description", "project", "issuetype", "status", "priority", epicLinkFieldName];
         return this.jqlService.prepareJqlRequest(this.JQL_REQUEST + projectKey, jqlFields);
     }
 }
