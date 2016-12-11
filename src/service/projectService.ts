@@ -37,7 +37,7 @@ export class ProjectService {
             this.getKeyList(epics), customField);
 
         return new Promise<CardWebModel[]>((resolve, reject) => {
-            resolve(this.cardConnector.apply(epics, issuesWithParentKeys));
+            resolve(this.cardConnector.apply(epics, issuesWithParentKeys, "key"));
         });
     }
 

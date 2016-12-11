@@ -24,9 +24,9 @@ export default (addon) => {
         const httpClient = getHttpClient(addon, req);
         const projectService = new ProjectService(httpClient);
 
-        projectService.getProjectCards(req.params.key).then((epicResponse) => {
+        projectService.getProjectCards(req.params.key).then((projectResponse) => {
             res.setHeader("Content-Type", "application/json");
-            res.send(epicResponse);
+            res.send(projectResponse);
         });
     });
 

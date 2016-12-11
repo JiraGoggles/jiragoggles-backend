@@ -13,19 +13,21 @@ export class RootService {
     private projectToCardWebModel = new ProjectToCardWebModel();
     private parentChildrenCardConnector = new ParentChildrenCardConnector();
     private transformUtils = new TransformUtils();
-    private epicAsChildService;
+    private rootChildrensService;
 
     constructor(private httpClient) {
-        this.epicAsChildService = new RootChildrensService(httpClient);
+        this.rootChildrensService = new RootChildrensService(httpClient);
     }
 
     public async getRootCards(): Promise<CardWebModel[]> {
-        let [epicsWithParentId, projects] = await Promise.all([this.epicAsChildService.getEpicsWithParentId(),
-            this.doGetProject()]);
+        let [epicsWithParentId, projects] = await Promise.all([
+            this.rootChildrensService.getEpicsWithParentId(),
+            this.doGetProject()
+        ]);
 
-            return new Promise<CardWebModel[]>((resolve) => {
-                resolve(this.parentChildrenCardConnector.apply(projects, epicsWithParentId));
-            });
+        return new Promise<CardWebModel[]>((resolve) => {
+            resolve(this.parentChildrenCardConnector.apply(projects, epicsWithParentId, "id"));
+        });
 
     }
 
@@ -35,7 +37,7 @@ export class RootService {
                 if (err) {
                     reject(err);
                 }
-                resolve(this.transformUtils.transform(body, this.projectToCardWebModel));
+                resolve(this.transformUtils.transform(JSON.parse(body), this.projectToCardWebModel));
             });
         });
     }

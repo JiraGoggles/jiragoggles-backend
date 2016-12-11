@@ -23,7 +23,7 @@ export class RootChildrensService {
         return new Promise<any>((resolve, reject) => {
             var toReturn: Dictionary<CardWebModel[]> = {};
             for (let epic of epics.issues) {
-                let projectId = epic.jqlFields.project.id;
+                let projectId = epic.fields.project.id;
                 if (!toReturn[projectId]) {
                     toReturn[projectId] = [];
                 }
