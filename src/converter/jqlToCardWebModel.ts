@@ -1,19 +1,23 @@
-import {CardWebModel} from "../model/cardWebModel";
 import {Converter} from "./converter";
+import {CardWebModel} from "../model/cardWebModel";
 /**
  * Created by JJax on 20.11.2016.
  */
-export class JqlToCardWebModel implements Converter<CardWebModel>{
-    public apply(epicJql): CardWebModel {
+
+export class JqlToCardWebModel implements Converter<CardWebModel> {
+    public apply(jqlResponse): CardWebModel {
         return {
-            id: epicJql.id,
-            key: epicJql.key,
-            name: epicJql.fields.summary,
-            type: epicJql.fields.issuetype.name,
-            url: epicJql.self,
-            description: epicJql.fields.description,
+            id: jqlResponse.id,
+            key: jqlResponse.key,
+            name: jqlResponse.fields.summary,
+            type: jqlResponse.fields.issuetype.name,
+            url: jqlResponse.self,
+            description: jqlResponse.fields.description,
             avatarUrls: null,
+            priorityImgUrl: jqlResponse.fields.priority.iconUrl,
+            typeImgUrl: jqlResponse.fields.issuetype.iconUrl,
+            status: jqlResponse.fields.status.name,
             subCards: null,
         };
-    };
+    }
 }

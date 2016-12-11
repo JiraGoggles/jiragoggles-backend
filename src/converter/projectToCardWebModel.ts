@@ -14,6 +14,9 @@ export class ProjectToCardWebModel implements Converter<CardWebModel>{
             url: project.self,
             description: project.description,
             avatarUrls: project.avatarUrls,
+            priorityImgUrl: null,
+            typeImgUrl: null,
+            status: null,
             subCards: []
         };
     };

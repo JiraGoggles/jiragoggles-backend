@@ -2,6 +2,7 @@ import * as express from "express";
 import {getHttpClient} from "../auth/authHelpers";
 import {RootService} from  "../service/rootService";
 import {ProjectService} from "../service/projectService";
+import {StoryService} from "../service/storyService";
 
 /**
  * Created by JJax on 19.11.2016.
@@ -27,6 +28,16 @@ export default (addon) => {
         projectService.getProjectCards(req.params.key).then((projectResponse) => {
             res.setHeader("Content-Type", "application/json");
             res.send(projectResponse);
+        });
+    });
+
+    router.get('/project/:projectKey/:epicKey/:key', (req, res) => {
+        const httpClient = getHttpClient(addon, req);
+        const storyService = new StoryService(httpClient);
+
+        storyService.getStoryCards(req.params.key).then((storyResponse) => {
+            res.setHeader("Content-Type", "application/json");
+            res.send(storyResponse);
         });
     });
 

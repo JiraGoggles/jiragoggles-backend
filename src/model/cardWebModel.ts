@@ -11,5 +11,8 @@ export class CardWebModel {
     url: string;
     avatarUrls: Dictionary<String>;
     type: string;
+    typeImgUrl: string;
+    priorityImgUrl: string;
+    status: string;
     subCards: CardWebModel[];
 };
