@@ -3,6 +3,7 @@ import {getHttpClient} from "../auth/authHelpers";
 import {RootService} from  "../service/rootService";
 import {ProjectService} from "../service/projectService";
 import {StoryService} from "../service/storyService";
+import {EpicService} from "../service/epicService";
 
 /**
  * Created by JJax on 19.11.2016.
@@ -32,6 +33,17 @@ export default (addon) => {
         projectService.getProjectCards(req.params.key, req.query.start, req.query.size).then((projectResponse) => {
             res.setHeader("Content-Type", "application/json");
             res.send(projectResponse);
+        });
+    });
+
+
+    router.get('/project/:projectKey/:epicKey', (req, res) => {
+        const httpClient = getHttpClient(addon, req);
+        const epicService = new EpicService(httpClient);
+
+        epicService.getEpicCards(req.params.projectKey, req.params.epicKey).then((epicResponse) => {
+            res.setHeader("Content-Type", "application/json");
+            res.send(epicResponse);
         });
     });
 
