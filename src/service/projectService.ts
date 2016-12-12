@@ -29,7 +29,7 @@ export class ProjectService {
         var epicLinkFieldName = await this.customFieldService.getCustomFields(this.EPIC_FIELD_NAME);
         var projectChildrens = await this.jqlService.doRequest(this.prepareEpicsForProjectJql(projectKey, epicLinkFieldName));
         return new Promise<CardWebModel[]>((resolve) => {
-            var epics = this.extractEpics(projectChildrens).slice(start, size);
+            var epics = this.extractEpics(projectChildrens).slice(start, start + size);
             var others = this.extractStandaloneIssues(projectChildrens, epicLinkFieldName);
             var epicsChildrens = this.extractEpicChildrenWithParentKey(projectChildrens, epicLinkFieldName);
 

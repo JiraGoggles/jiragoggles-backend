@@ -24,7 +24,7 @@ export class RootService {
             this.doGetProject()
         ]);
 
-        projects = projects.slice(start, size);
+        projects = projects.slice(start, start + size);
         return new Promise<CardWebModel[]>((resolve) => {
             resolve(this.parentChildrenCardConnector.apply(projects, epicsWithParentId, "id"));
         });

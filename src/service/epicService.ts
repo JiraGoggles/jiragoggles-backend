@@ -24,14 +24,14 @@ export class EpicService {
         this.jqlService = new JqlService(httpClient);
     }
 
-    public async getEpicCards(projectKey: string, epicKey: string) : Promise<CardWebModel[]> {
+    public async getEpicCards(projectKey: string, epicKey: string, start: number, size: number) : Promise<CardWebModel[]> {
         var request = epicKey === this.OTHER_EPIC_NAME ? this.prepareRequestForOthers(projectKey) :
             this.prepareRequest(epicKey);
         var stories = await this.jqlService.doRequest(request);
 
         return new Promise<CardWebModel[]>((resolve) => {
             var childrensWithParentId = this.getChildrensWithParentId(stories);
-            var storyCards = this.transfromUtils.transform(stories.issues, this.jqlToCardWebModel);
+            var storyCards = this.transfromUtils.transform(stories.issues.slice(start, start + size), this.jqlToCardWebModel);
 
             resolve(this.cardConnector.apply(storyCards, childrensWithParentId, "key"));
         });
@@ -46,10 +46,10 @@ export class EpicService {
     }
 
     private prepareRequest(epicKey: string) : JqlModel {
-        return this.jqlService.prepareJqlRequest(this.JQL_REQUEST + epicKey, this.JQL_FIELDS);
+        return this.jqlService.prepareJqlOrderByRequest(this.JQL_REQUEST + epicKey, this.JQL_FIELDS);
     }
 
     private prepareRequestForOthers(projectKey: string): JqlModel {
-        return this.jqlService.prepareJqlRequest(this.JQL_OTHER_EPICS_REQUEST + projectKey, this.JQL_FIELDS);
+        return this.jqlService.prepareJqlOrderByRequest(this.JQL_OTHER_EPICS_REQUEST + projectKey, this.JQL_FIELDS);
     }
 }

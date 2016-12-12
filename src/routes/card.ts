@@ -41,7 +41,9 @@ export default (addon) => {
         const httpClient = getHttpClient(addon, req);
         const epicService = new EpicService(httpClient);
 
-        epicService.getEpicCards(req.params.projectKey, req.params.epicKey).then((epicResponse) => {
+        let start = req.query.start ? req.query.start : 0;
+        let size = req.query.size ? req.query.size : 4;
+        epicService.getEpicCards(req.params.projectKey, req.params.epicKey, start, size).then((epicResponse) => {
             res.setHeader("Content-Type", "application/json");
             res.send(epicResponse);
         });

@@ -22,7 +22,7 @@ export class StoryService {
             this.JQL_REQUEST + key, this.JQL_FIELDS));
 
         return new Promise<CardWebModel[]>((resolve) => {
-            resolve(this.transformUtils.transform(jqlResponse.issues[0].fields.subtasks.slice(start, size),
+            resolve(this.transformUtils.transform(jqlResponse.issues[0].fields.subtasks.slice(start, start + size),
                 this.jqlToCardWebModel));
         });
     }
