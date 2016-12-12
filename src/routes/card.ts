@@ -15,7 +15,9 @@ export default (addon) => {
         const httpClient = getHttpClient(addon, req);
         const rootService = new RootService(httpClient);
 
-        rootService.getRootCards().then((rootResponse) => {
+        let start = req.query.start ? req.query.start : 0;
+        let size = req.query.size ? req.query.size : 4;
+        rootService.getRootCards(start, size).then((rootResponse) => {
             res.setHeader("Content-Type", "application/json");
             res.send(rootResponse);
         });
@@ -25,7 +27,9 @@ export default (addon) => {
         const httpClient = getHttpClient(addon, req);
         const projectService = new ProjectService(httpClient);
 
-        projectService.getProjectCards(req.params.key).then((projectResponse) => {
+        let start = req.query.start ? req.query.start : 0;
+        let size = req.query.size ? req.query.size : 4;
+        projectService.getProjectCards(req.params.key, req.query.start, req.query.size).then((projectResponse) => {
             res.setHeader("Content-Type", "application/json");
             res.send(projectResponse);
         });
@@ -35,7 +39,9 @@ export default (addon) => {
         const httpClient = getHttpClient(addon, req);
         const storyService = new StoryService(httpClient);
 
-        storyService.getStoryCards(req.params.key).then((storyResponse) => {
+        let start = req.query.start ? req.query.start : 0;
+        let size = req.query.size ? req.query.size : 4;
+        storyService.getStoryCards(req.params.key, start, size).then((storyResponse) => {
             res.setHeader("Content-Type", "application/json");
             res.send(storyResponse);
         });

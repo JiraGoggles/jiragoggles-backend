@@ -25,11 +25,11 @@ export class ProjectService {
         this.customFieldService = new CustomFieldService(httpClient);
     }
 
-    public async getProjectCards(projectKey: string): Promise<CardWebModel[]> {
+    public async getProjectCards(projectKey: string, start: number, size: number): Promise<CardWebModel[]> {
         var epicLinkFieldName = await this.customFieldService.getCustomFields(this.EPIC_FIELD_NAME);
         var projectChildrens = await this.jqlService.doRequest(this.prepareEpicsForProjectJql(projectKey, epicLinkFieldName));
         return new Promise<CardWebModel[]>((resolve) => {
-            var epics = this.extractEpics(projectChildrens);
+            var epics = this.extractEpics(projectChildrens).slice(start, size);
             var others = this.extractStandaloneIssues(projectChildrens, epicLinkFieldName);
             var epicsChildrens = this.extractEpicChildrenWithParentKey(projectChildrens, epicLinkFieldName);
 
@@ -40,7 +40,9 @@ export class ProjectService {
                 type: "Epic",
                 name: "Others"
             };
-            toReturnCards.push(otherParentCard);
+            if(toReturnCards.length < size) {
+                toReturnCards.push(otherParentCard);
+            }
 
             resolve(toReturnCards);
         });
@@ -81,6 +83,6 @@ export class ProjectService {
 
     private prepareEpicsForProjectJql(projectKey: string, epicLinkFieldName: string): JqlModel {
         let jqlFields = ["name", "summary", "description", "project", "issuetype", "status", "priority", epicLinkFieldName];
-        return this.jqlService.prepareJqlRequest(this.JQL_REQUEST + projectKey, jqlFields);
+        return this.jqlService.prepareJqlOrderByRequest(this.JQL_REQUEST + projectKey, jqlFields);
     }
 }

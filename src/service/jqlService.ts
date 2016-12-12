@@ -22,9 +22,9 @@ export class JqlService {
         });
     }
 
-    public prepareJqlRequest(request: string, fields: string[]) : JqlModel {
+    public prepareJqlOrderByRequest(request: string, fields: string[]) : JqlModel {
         return {
-            request: request,
+            request: request + " order by rank",
             fields: fields
         };
     }

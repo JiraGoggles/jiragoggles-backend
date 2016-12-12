@@ -38,6 +38,6 @@ export class RootChildrensService {
     }
 
     private prepareEpicJql(): JqlModel {
-        return this.jqlService.prepareJqlRequest(this.jqlRequest, this.jqlFields);
+        return this.jqlService.prepareJqlOrderByRequest(this.jqlRequest, this.jqlFields);
     }
 }

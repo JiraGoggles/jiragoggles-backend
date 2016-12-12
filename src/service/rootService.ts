@@ -18,12 +18,13 @@ export class RootService {
         this.rootChildrensService = new RootChildrensService(httpClient);
     }
 
-    public async getRootCards(): Promise<CardWebModel[]> {
+    public async getRootCards(start: number, size: number): Promise<CardWebModel[]> {
         let [epicsWithParentId, projects] = await Promise.all([
             this.rootChildrensService.getEpicsWithParentId(),
             this.doGetProject()
         ]);
 
+        projects = projects.slice(start, size);
         return new Promise<CardWebModel[]>((resolve) => {
             resolve(this.parentChildrenCardConnector.apply(projects, epicsWithParentId, "id"));
         });
