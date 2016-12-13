@@ -3,7 +3,7 @@ import {Dictionary} from "../commons/dictionary";
  * Created by JJax on 19.11.2016.
  */
 
-export class CardWebModel {
+export class CardModel {
     id: number;
     key: string;
     name: string;
@@ -14,5 +14,5 @@ export class CardWebModel {
     typeImgUrl: string;
     priorityImgUrl: string;
     status: string;
-    subCards: CardWebModel[];
+    subCards: CardModel[];
 };

@@ -1,11 +1,11 @@
 import {Converter} from "./converter";
-import {CardWebModel} from "../model/cardWebModel";
+import {CardModel} from "../model/cardModel";
 /**
  * Created by JJax on 20.11.2016.
  */
 
-export class JqlToCardWebModel implements Converter<CardWebModel> {
-    public apply(jqlResponse): CardWebModel {
+export class JqlToCardModel implements Converter<CardModel> {
+    public apply(jqlResponse): CardModel {
         return {
             id: jqlResponse.id,
             key: jqlResponse.key,

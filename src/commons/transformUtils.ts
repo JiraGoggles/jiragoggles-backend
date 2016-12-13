@@ -2,7 +2,6 @@
  * Created by JJax on 08.12.2016.
  */
 
-import {CardWebModel} from "../model/cardWebModel";
 import {Converter} from "../converter/converter";
 
 export class TransformUtils {
