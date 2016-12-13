@@ -1,9 +1,9 @@
-import {CardWebModel} from "../model/cardWebModel";
+import {CardModel} from "../model/cardModel";
 import {JqlService} from "./jqlService";
 import {JqlModel} from "../model/jqlModel";
 import {Dictionary} from "../commons/dictionary";
 import {TransformUtils} from "../commons/transformUtils";
-import {JqlToCardWebModel} from "../converter/jqlToCardWebModel";
+import {JqlToCardModel} from "../converter/jqlToCardModel";
 import {ParentChildrenCardConnector} from "../commons/parentChildrenCardConnector";
 import {PageModel} from "../model/pageModel";
 /**
@@ -16,7 +16,7 @@ export class EpicService {
     private readonly JQL_FIELDS = ["name", "summary", "description", "project", "issuetype", "status", "priority", "subtasks"];
     private readonly OTHER_EPIC_NAME = "OTHERS";
     private transfromUtils = new TransformUtils();
-    private jqlToCardWebModel = new JqlToCardWebModel();
+    private jqlToCardModel = new JqlToCardModel();
     private cardConnector = new ParentChildrenCardConnector();
     private jqlService;
 
@@ -25,23 +25,23 @@ export class EpicService {
         this.jqlService = new JqlService(httpClient);
     }
 
-    public async getEpicCards(projectKey: string, epicKey: string, pageModel: PageModel) : Promise<CardWebModel[]> {
+    public async getEpicCards(projectKey: string, epicKey: string, pageModel: PageModel) : Promise<CardModel[]> {
         var request = epicKey === this.OTHER_EPIC_NAME ? this.prepareRequestForOthers(projectKey, pageModel) :
             this.prepareRequest(epicKey, pageModel);
         var stories = await this.jqlService.doRequest(request);
 
-        return new Promise<CardWebModel[]>((resolve) => {
+        return new Promise<CardModel[]>((resolve) => {
             var childrensWithParentId = this.getChildrensWithParentId(stories);
-            var storyCards = this.transfromUtils.transform(stories.issues, this.jqlToCardWebModel);
+            var storyCards = this.transfromUtils.transform(stories.issues, this.jqlToCardModel);
 
             resolve(this.cardConnector.apply(storyCards, childrensWithParentId, "key"));
         });
     }
 
-    private getChildrensWithParentId(jqlResponse): Dictionary<CardWebModel[]> {
-        var toReturn: Dictionary<CardWebModel[]> = {};
+    private getChildrensWithParentId(jqlResponse): Dictionary<CardModel[]> {
+        var toReturn: Dictionary<CardModel[]> = {};
         for(let issue of jqlResponse.issues){
-            toReturn[issue.key] = this.transfromUtils.transform(issue.fields.subtasks, this.jqlToCardWebModel);
+            toReturn[issue.key] = this.transfromUtils.transform(issue.fields.subtasks, this.jqlToCardModel);
         }
         return toReturn;
     }

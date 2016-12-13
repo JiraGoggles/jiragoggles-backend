@@ -1,5 +1,5 @@
-import {CardWebModel} from "../model/cardWebModel";
-import {ProjectToCardWebModel} from "../converter/projectToCardWebModel";
+import {CardModel} from "../model/cardModel";
+import {ProjectToCardModel} from "../converter/projectToCardModel";
 import {RootChildrensService} from "./rootChildrensService";
 import {ParentChildrenCardConnector} from "../commons/parentChildrenCardConnector";
 import {TransformUtils} from "../commons/transformUtils";
@@ -11,7 +11,7 @@ import {PagingUtils} from "../commons/pagingUtils";
  */
 
 export class RootService {
-    private projectToCardWebModel = new ProjectToCardWebModel();
+    private projectToCardModel = new ProjectToCardModel();
     private parentChildrenCardConnector = new ParentChildrenCardConnector();
     private transformUtils = new TransformUtils();
     private pagingUtils = new PagingUtils();
@@ -21,19 +21,19 @@ export class RootService {
         this.rootChildrensService = new RootChildrensService(httpClient);
     }
 
-    public async getRootCards(page: PageModel): Promise<CardWebModel[]> {
+    public async getRootCards(page: PageModel): Promise<CardModel[]> {
         let [epicsWithParentId, projects] = await Promise.all([
             this.rootChildrensService.getEpicsWithParentId(),
             this.doGetProject(page)
         ]);
 
-        return new Promise<CardWebModel[]>((resolve) => {
+        return new Promise<CardModel[]>((resolve) => {
             resolve(this.parentChildrenCardConnector.apply(projects, epicsWithParentId, "id"));
         });
 
     }
 
-    private doGetProject(page: PageModel): Promise<CardWebModel[]> {
+    private doGetProject(page: PageModel): Promise<CardModel[]> {
         return new Promise((resolve, reject) => {
             this.httpClient.get('/rest/api/2/project?expand=description', (err, jiraRes, body) => {
                 if (err) {
@@ -41,7 +41,7 @@ export class RootService {
                 }
 
                 var slicedProjects = this.pagingUtils.slice(JSON.parse(body), page);
-                resolve(this.transformUtils.transform(slicedProjects, this.projectToCardWebModel));
+                resolve(this.transformUtils.transform(slicedProjects, this.projectToCardModel));
             });
         });
     }

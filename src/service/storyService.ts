@@ -1,7 +1,7 @@
-import {CardWebModel} from "../model/cardWebModel";
+import {CardModel} from "../model/cardModel";
 import {JqlService} from "./jqlService";
 import {TransformUtils} from "../commons/transformUtils";
-import {JqlToCardWebModel} from "../converter/jqlToCardWebModel";
+import {JqlToCardModel} from "../converter/jqlToCardModel";
 import {PageModel} from "../model/pageModel";
 import {PagingUtils} from "../commons/pagingUtils";
 /**
@@ -13,20 +13,20 @@ export class StoryService {
     private readonly JQL_FIELDS = ["name", "summary", "description", "project", "issuetype", "status", "subtasks"];
     private jqlService;
     private transformUtils = new TransformUtils();
-    private jqlToCardWebModel = new JqlToCardWebModel();
+    private jqlToCardModel = new JqlToCardModel();
     private pagingUtils = new PagingUtils();
 
     constructor(httpClient){
         this.jqlService = new JqlService(httpClient);
     }
 
-    public async getStoryCards(key: string, pageModel: PageModel): Promise<CardWebModel[]> {
+    public async getStoryCards(key: string, pageModel: PageModel): Promise<CardModel[]> {
         let jqlResponse = await this.jqlService.doRequest(this.jqlService.prepareJqlModel(
             this.JQL_REQUEST + key, this.JQL_FIELDS));
 
-        return new Promise<CardWebModel[]>((resolve) => {
+        return new Promise<CardModel[]>((resolve) => {
             let slicedSubTasks = this.pagingUtils.slice(jqlResponse.issues[0].fields.subtasks, pageModel);
-            resolve(this.transformUtils.transform(slicedSubTasks, this.jqlToCardWebModel));
+            resolve(this.transformUtils.transform(slicedSubTasks, this.jqlToCardModel));
         });
     }
 }
