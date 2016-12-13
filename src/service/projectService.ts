@@ -5,6 +5,8 @@ import {JqlToCardWebModel} from "../converter/jqlToCardWebModel";
 import {CustomFieldService} from "./customFieldService";
 import {ParentChildrenCardConnector} from "../commons/parentChildrenCardConnector";
 import {Dictionary} from "../commons/dictionary";
+import {PageModel} from "../model/pageModel";
+import {PagingUtils} from "../commons/pagingUtils";
 
 /**
  * Created by JJax on 29.11.2016.
@@ -16,6 +18,7 @@ export class ProjectService {
     private issueJqlToCardWebModel = new JqlToCardWebModel();
     private jqlToCardWebModel = new JqlToCardWebModel();
     private cardConnector = new ParentChildrenCardConnector();
+    private pagingUtils = new PagingUtils();
     private jqlService;
     private customFieldService;
     private issueService;
@@ -25,11 +28,11 @@ export class ProjectService {
         this.customFieldService = new CustomFieldService(httpClient);
     }
 
-    public async getProjectCards(projectKey: string, start: number, size: number): Promise<CardWebModel[]> {
+    public async getProjectCards(projectKey: string, pageModel: PageModel): Promise<CardWebModel[]> {
         var epicLinkFieldName = await this.customFieldService.getCustomFields(this.EPIC_FIELD_NAME);
         var projectChildrens = await this.jqlService.doRequest(this.prepareEpicsForProjectJql(projectKey, epicLinkFieldName));
         return new Promise<CardWebModel[]>((resolve) => {
-            var epics = this.extractEpics(projectChildrens).slice(start, start + size);
+            var epics = this.pagingUtils.slice(this.extractEpics(projectChildrens), pageModel);
             var others = this.extractStandaloneIssues(projectChildrens, epicLinkFieldName);
             var epicsChildrens = this.extractEpicChildrenWithParentKey(projectChildrens, epicLinkFieldName);
 
@@ -40,7 +43,7 @@ export class ProjectService {
                 type: "Epic",
                 name: "Others"
             };
-            if(toReturnCards.length < size) {
+            if(toReturnCards.length < pageModel.size) {
                 toReturnCards.push(otherParentCard);
             }
 
@@ -83,6 +86,6 @@ export class ProjectService {
 
     private prepareEpicsForProjectJql(projectKey: string, epicLinkFieldName: string): JqlModel {
         let jqlFields = ["name", "summary", "description", "project", "issuetype", "status", "priority", epicLinkFieldName];
-        return this.jqlService.prepareJqlOrderByRequest(this.JQL_REQUEST + projectKey, jqlFields);
+        return this.jqlService.prepareJqlModel(this.JQL_REQUEST + projectKey, jqlFields);
     }
 }

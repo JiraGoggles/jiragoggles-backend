@@ -3,6 +3,7 @@ import {CardWebModel} from "../model/cardWebModel";
 import {Dictionary} from "../commons/dictionary";
 import {JqlModel} from "../model/jqlModel";
 import {JqlService} from "./jqlService";
+import {PageModel} from "../model/pageModel";
 
 /**
  * Created by JJax on 23.11.2016.
@@ -38,6 +39,6 @@ export class RootChildrensService {
     }
 
     private prepareEpicJql(): JqlModel {
-        return this.jqlService.prepareJqlOrderByRequest(this.jqlRequest, this.jqlFields);
+        return this.jqlService.prepareJqlModel(this.jqlRequest, this.jqlFields);
     }
 }

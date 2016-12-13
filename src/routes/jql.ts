@@ -22,7 +22,11 @@ export default (addon) => {
                 "description",
                 "project",
                 "issuetype"
-            ]
+            ],
+            pageModel: {
+                start: 0,
+                size: -1
+            }
         };
         jqlService.doRequest(jqlModel).then((jqlRes) => {
                 res.send(jqlRes);
