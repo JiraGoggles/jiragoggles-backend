@@ -7,6 +7,7 @@ import {ParentChildrenCardConnector} from "../commons/parentChildrenCardConnecto
 import {Dictionary} from "../commons/dictionary";
 import {PageModel} from "../model/pageModel";
 import {PagingUtils} from "../commons/pagingUtils";
+import {CardsWebModel} from "../model/cardsWebModel";
 
 /**
  * Created by JJax on 29.11.2016.
@@ -27,26 +28,23 @@ export class ProjectService {
         this.customFieldService = new CustomFieldService(httpClient);
     }
 
-    public async getProjectCards(projectKey: string, pageModel: PageModel): Promise<CardModel[]> {
+    public async getProjectCards(projectKey: string, pageModel: PageModel): Promise<CardsWebModel> {
         var epicLinkFieldName = await this.customFieldService.getCustomFields(this.EPIC_FIELD_NAME);
         var projectChildrens = await this.jqlService.doRequest(this.prepareEpicsForProjectJql(projectKey, epicLinkFieldName));
-        return new Promise<CardModel[]>((resolve) => {
-            var epics = this.pagingUtils.slice(this.extractEpics(projectChildrens), pageModel);
-            var others = this.extractStandaloneIssues(projectChildrens, epicLinkFieldName);
-            var epicsChildrens = this.extractEpicChildrenWithParentKey(projectChildrens, epicLinkFieldName);
 
-            var toReturnCards = this.cardConnector.apply(epics, epicsChildrens, "key");
-            var otherParentCard: CardModel = <CardModel> {
-                subCards: others,
-                key: "OTHERS",
-                type: "Epic",
-                name: "Others"
-            };
-            if(toReturnCards.length < pageModel.size) {
-                toReturnCards.push(otherParentCard);
+        return new Promise<CardsWebModel>((resolve) => {
+            var allEpics = this.extractEpics(projectChildrens);
+            var slicedEpics = this.pagingUtils.slice(allEpics, pageModel);
+            var epicsChildrens = this.extractEpicChildrenWithParentKey(projectChildrens, epicLinkFieldName);
+            var toReturnCards = this.cardConnector.apply(slicedEpics, epicsChildrens, "key");
+
+            var standaloneIssues = this.extractStandaloneIssues(projectChildrens, epicLinkFieldName);
+            if(toReturnCards.length < pageModel.size || pageModel.size < 0) {
+                toReturnCards.push(this.createOtherEpicCard(standaloneIssues));
             }
 
-            resolve(toReturnCards);
+            var total = allEpics.length + (standaloneIssues.length > 0 ? 1 : 0);
+            resolve(new CardsWebModel(total, toReturnCards));
         });
     }
 
@@ -86,5 +84,14 @@ export class ProjectService {
     private prepareEpicsForProjectJql(projectKey: string, epicLinkFieldName: string): JqlModel {
         let jqlFields = ["name", "summary", "description", "project", "issuetype", "status", "priority", epicLinkFieldName];
         return this.jqlService.prepareJqlModel(this.JQL_REQUEST + projectKey, jqlFields);
+    }
+
+    private createOtherEpicCard(standaloneIssues: CardModel[]): CardModel {
+        return <CardModel> {
+            subCards: standaloneIssues,
+            key: "OTHERS",
+            type: "Epic",
+            name: "Others"
+        };
     }
 }

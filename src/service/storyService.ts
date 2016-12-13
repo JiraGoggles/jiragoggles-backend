@@ -4,6 +4,7 @@ import {TransformUtils} from "../commons/transformUtils";
 import {JqlToCardModel} from "../converter/jqlToCardModel";
 import {PageModel} from "../model/pageModel";
 import {PagingUtils} from "../commons/pagingUtils";
+import {CardsWebModel} from "../model/cardsWebModel";
 /**
  * Created by JJax on 11.12.2016.
  */
@@ -20,13 +21,14 @@ export class StoryService {
         this.jqlService = new JqlService(httpClient);
     }
 
-    public async getStoryCards(key: string, pageModel: PageModel): Promise<CardModel[]> {
+    public async getStoryCards(key: string, pageModel: PageModel): Promise<CardsWebModel> {
         let jqlResponse = await this.jqlService.doRequest(this.jqlService.prepareJqlModel(
             this.JQL_REQUEST + key, this.JQL_FIELDS));
 
-        return new Promise<CardModel[]>((resolve) => {
-            let slicedSubTasks = this.pagingUtils.slice(jqlResponse.issues[0].fields.subtasks, pageModel);
-            resolve(this.transformUtils.transform(slicedSubTasks, this.jqlToCardModel));
+        return new Promise<CardsWebModel>((resolve) => {
+            let subtasks = jqlResponse.issues[0].fields.subtasks;
+            let slicedSubTasks = this.pagingUtils.slice(subtasks, pageModel);
+            resolve(new CardsWebModel(subtasks.length, this.transformUtils.transform(slicedSubTasks, this.jqlToCardModel)));
         });
     }
 }

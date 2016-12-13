@@ -5,6 +5,7 @@ import {ParentChildrenCardConnector} from "../commons/parentChildrenCardConnecto
 import {TransformUtils} from "../commons/transformUtils";
 import {PageModel} from "../model/pageModel";
 import {PagingUtils} from "../commons/pagingUtils";
+import {CardsWebModel} from "../model/cardsWebModel";
 
 /**
  * Created by JJax on 19.11.2016.
@@ -21,14 +22,17 @@ export class RootService {
         this.rootChildrensService = new RootChildrensService(httpClient);
     }
 
-    public async getRootCards(page: PageModel): Promise<CardModel[]> {
+    public async getRootCards(page: PageModel): Promise<CardsWebModel> {
         let [epicsWithParentId, projects] = await Promise.all([
             this.rootChildrensService.getEpicsWithParentId(),
             this.doGetProject(page)
         ]);
 
-        return new Promise<CardModel[]>((resolve) => {
-            resolve(this.parentChildrenCardConnector.apply(projects, epicsWithParentId, "id"));
+
+        var slicedProjects = this.pagingUtils.slice(projects, page);
+        return new Promise<CardsWebModel>((resolve) => {
+            var connectedCards = this.parentChildrenCardConnector.apply(slicedProjects, epicsWithParentId, "id");
+            resolve(new CardsWebModel(projects.length, connectedCards));
         });
 
     }
@@ -39,9 +43,7 @@ export class RootService {
                 if (err) {
                     reject(err);
                 }
-
-                var slicedProjects = this.pagingUtils.slice(JSON.parse(body), page);
-                resolve(this.transformUtils.transform(slicedProjects, this.projectToCardModel));
+                resolve(this.transformUtils.transform(JSON.parse(body), this.projectToCardModel));
             });
         });
     }

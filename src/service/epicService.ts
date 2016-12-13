@@ -6,6 +6,7 @@ import {TransformUtils} from "../commons/transformUtils";
 import {JqlToCardModel} from "../converter/jqlToCardModel";
 import {ParentChildrenCardConnector} from "../commons/parentChildrenCardConnector";
 import {PageModel} from "../model/pageModel";
+import {CardsWebModel} from "../model/cardsWebModel";
 /**
  * Created by JJax on 11.12.2016.
  */
@@ -25,16 +26,17 @@ export class EpicService {
         this.jqlService = new JqlService(httpClient);
     }
 
-    public async getEpicCards(projectKey: string, epicKey: string, pageModel: PageModel) : Promise<CardModel[]> {
+    public async getEpicCards(projectKey: string, epicKey: string, pageModel: PageModel) : Promise<CardsWebModel> {
         var request = epicKey === this.OTHER_EPIC_NAME ? this.prepareRequestForOthers(projectKey, pageModel) :
             this.prepareRequest(epicKey, pageModel);
-        var stories = await this.jqlService.doRequest(request);
+        var jqlResponse = await this.jqlService.doRequest(request);
 
-        return new Promise<CardModel[]>((resolve) => {
-            var childrensWithParentId = this.getChildrensWithParentId(stories);
-            var storyCards = this.transfromUtils.transform(stories.issues, this.jqlToCardModel);
+        return new Promise<CardsWebModel>((resolve) => {
+            var childrensWithParentId = this.getChildrensWithParentId(jqlResponse);
+            var storyCards = this.transfromUtils.transform(jqlResponse.issues, this.jqlToCardModel);
+            var connectedCards = this.cardConnector.apply(storyCards, childrensWithParentId, "key");
 
-            resolve(this.cardConnector.apply(storyCards, childrensWithParentId, "key"));
+            resolve(new CardsWebModel(jqlResponse.total, connectedCards));
         });
     }
 
