@@ -12,3 +12,11 @@ routes/*.js*
 service/*.js*
 store.db
 www.js
+
+.baseDir.js
+.baseDir.js.map
+app.js
+app.js.map
+credentials.js.map
+views/index.hbs
+www.js.map
