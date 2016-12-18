@@ -1,8 +1,17 @@
 language: node_js
 node_js:
-  - "6"
+- '6'
 before_install:
-  - npm i -g npm@^3
-  - npm install -g typescript
+- npm i -g npm@^3
+- npm install -g typescript
 script:
-  - tsc
+- tsc
+deploy:
+  provider: heroku
+  api_key:
+    secure: zDKBd262BhGtpjMezIk+eLTfiISYDphCJwtICr95JuMSMaO9yJzEJMEweqrfntnO6Qim+UtpUHfC2+ljuBTN7RUR9WtE2lys4HE8VPvx9zfmZkfOFWhFaL+Jp6hqfxZLGQOJms6KI6GNOnHBEMWBr5/crwj4f/NS+4MWBVadzTzWdlKHzjvYhS/Xeid+5qw4JyFoVOwBTsflOqbNjVQEM7c8IjMxSeH1vPz6Z8vgRvcjiW4q1PxRnCA0+CgQO83W0DaCwSwxwTkDyk/DTfx5DpLZRaJPBnWuoon3Z+8/WgdtVq+fvDEvmsfINsjc5sW6GJXXBvzz580ov3depp6dhr1ujDHDD9syhR3+ip99z+56vjksc0mUMOFvv36bDXb8VmGm0LNm2xXlMUBgGX14Avaq17HCb/ZdkeG96WcTtXKkVQoldbgJErvgGXhMTazr+mV2U1cBQSL/jaCJ8/ho79mj8EWj0IKiuHpYqZKO7LDpO05s82Jq10qCVXrixg4/QQIz220aQ8moH8+Pyqok6xhG/67vGwTNrp61nO+UKYigyDpOIW8+0owH1SxORNfHYLuQddtUVnIv1ICNQLR4rc7RgdZxiRwRsQSDmW88GKHdci8ideDIutxjkzYnf8juJgs3xneocKb/db8yOtA2UZkkuZPYYgiMlWoqDCHBg1c=
+  app: testjiragoggles-backend
+  on: reverse-proxy-test
+  run:
+    - "NODE_ENV=production"
+    - "node www.js"
