@@ -15,8 +15,5 @@ deploy:
     repo: JiraGoggles/jiragoggles-backend
     branch: reverse-proxy-test
   run:
-    - "ls -l"
-    - "tsc"
-    - "ls -l"
-    - "sleep 5"
+    - "grunt"
     - "node www.js"
