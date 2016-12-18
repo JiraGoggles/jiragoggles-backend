@@ -15,5 +15,5 @@ deploy:
     repo: JiraGoggles/jiragoggles-backend
     branch: reverse-proxy-test
   run:
-    - "NODE_ENV=production"
+    - "tsc"
     - "node www.js"
