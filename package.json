@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "start": "node www.js",
+    "postinstall": "grunt",
     "grunt": "grunt && grunt watch",
     "dev": "NODE_ENV=development nodemon www.js",
     "prod": "NODE_ENV=production nodemon www.js",
