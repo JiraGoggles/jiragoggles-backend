@@ -1,6 +1,5 @@
 .idea
 .tscache
-public
 node_modules
 auth/*.js
 auth/*.js.map
