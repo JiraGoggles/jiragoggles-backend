@@ -13,5 +13,5 @@ deploy:
   app: testjiragoggles-backend
   on:
     repo: JiraGoggles/jiragoggles-backend
-    branch: reverse-proxy-test
+    branch: dev
   buildpack: nodejs
