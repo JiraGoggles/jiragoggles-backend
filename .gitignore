@@ -1,6 +1,5 @@
 .idea
 .tscache
-public
 node_modules
 auth/*.js
 auth/*.js.map
@@ -18,5 +17,4 @@ www.js
 app.js
 app.js.map
 credentials.js.map
-views/index.hbs
 www.js.map

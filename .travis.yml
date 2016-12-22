@@ -1,8 +1,17 @@
 language: node_js
 node_js:
-  - "6"
+- '6'
 before_install:
-  - npm i -g npm@^3
-  - npm install -g typescript
+- npm i -g npm@^3
+- npm install -g typescript
 script:
-  - tsc
+- tsc
+deploy:
+  provider: heroku
+  api_key:
+    secure: NqiOtA7ZvUqNjTWguAcTZEuuamjRbbGfb2PSpQWE3DmLJ2G8tO6uXsmIqkb66ES+XqPr23CjPJha8npQnc8Q8SfmWVOmlyxDEfN92qr2cGCSYdnvZAPzG5JqEksspQYz8ONY8thTAC4+FFdu/q9GN6NR1CR5I4nj29iT2A85jEJKLmVLoKqnM9Pb/LwNeBqqw+RnrS16jwJXHyb23/2cN733zllK5/8+Djcn83mKQMg6km4jPeCD3sZFnECfb7F986nJI/pnrj2NF+5Y1nAjVoE7H2aZ5/Md2Gvi/xkA8QBH0hNeoF3ZVkR0uNcMUSPpEjf8z1VeA3DguqLFQHw/o1oo17Idb/lnrnNhMuh6HRz6bWDhXSWNLL5mDSYDXtn3YhG3WbnaKqbN/Ld25uWUWI+j3UCHr5KGaZlvyOYIOHrpCfs/fTYeWzBYShwX6BUutoTKJXRwQrsm2HZSj/+rvCqkCCATd3FjjGVJYuXqhfoJi429wJeJvei7DzsyyTdgohUDY6a44AovYCpG4xs8NL3StbOVhVNUg8WwwQLNa7JUks22ZhpisJKV86joNtuCI8mCoeuHsMplff/4e3WintYXCjr6CkrrKCIJ9WdpguFJCDvIEIx0Md70BWbFoAVpP6OZQUmX6IkFQPwb7NrzRXQfn9aYjRe2FPdgKg8pWkA=
+  app: testjiragoggles-backend
+  on:
+    repo: JiraGoggles/jiragoggles-backend
+    branch: dev
+  buildpack: nodejs
