@@ -2,7 +2,7 @@
     "development": {
         "port": 3000,
         "errorTemplate": false,
-        "localBaseUrl": "https://jiragoggles.herokuapp.com",
+        "localBaseUrl": "https://alfajiragoggles.herokuapp.com",
         "store": {
             "adapter": "jugglingdb",
             "type": "sqlite3",
@@ -12,11 +12,11 @@
     "production": {
         "port": "$PORT",
         "errorTemplate": false,
-        "localBaseUrl": "https://jiragoggles.herokuapp.com",
+        "localBaseUrl": "https://alfajiragoggles.herokuapp.com",
         "store": {
             "adapter": "jugglingdb",
-            "type": "sqlite3",
-            "database": "store.db"
+            "type": "postgres",
+            "url": "$DATABASE_URL"
         },
         "whitelist": [
             "*.jira-dev.com",
