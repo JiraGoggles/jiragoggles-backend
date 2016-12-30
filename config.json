@@ -5,8 +5,8 @@
         "localBaseUrl": "https://alfajiragoggles.herokuapp.com",
         "store": {
             "adapter": "jugglingdb",
-            "type": "sqlite3",
-            "database": "store.db"
+            "type": "postgres",
+            "url": "$DATABASE_URL"
         }
     },
     "production": {
