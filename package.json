@@ -31,7 +31,7 @@
     "grunt-tslint": "^3.3.0",
     "jade": "^1.11.0",
     "jugglingdb": "0.2.x",
-    "jugglingdb-postgres": "^0.1.0",
+    "jugglingdb-mysql": "^0.2.3",
     "jugglingdb-sqlite3": "^0.1.0",
     "morgan": "^1.7.0",
     "nodemon": "^1.11.0",
