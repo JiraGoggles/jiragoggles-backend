@@ -1,9 +1,13 @@
 "use strict";
 
+console.log("before require");
 var pg = require('pg');
 
+console.log("before ssl");
 pg.defaults.ssl = true;
+console.log("before connect " + process.env.DATABASE_URL);
 pg.connect(process.env.DATABASE_URL, function(err, client) {
+    console.log("in function");
     if (err) throw err;
     console.log('Connected to postgres! Getting schemas...');
 
