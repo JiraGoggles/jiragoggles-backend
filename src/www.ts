@@ -1,5 +1,5 @@
 "use strict";
-
+require('pg').defaults.ssl = true;
 var server = require("./app");
 var app = server.app;
 var addon = server.addon;
@@ -9,7 +9,6 @@ var http = require("http");
 var os = require("os");
 var hbs = require("express-hbs");
 
-process.env.PGSSLMODE = require;
 var port = normalizePort(process.env.PORT || 3000);
 app.set("port", port);
 // Add an hbs helper to fingerprint static resource urls
