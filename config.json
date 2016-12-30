@@ -6,7 +6,7 @@
         "store": {
             "adapter": "jugglingdb",
             "type": "mysql",
-            "url": "$DATABASE_URL"
+            "url": "CLEARDB_DATABASE_URL"
         }
     },
     "production": {
@@ -16,7 +16,7 @@
         "store": {
             "adapter": "jugglingdb",
             "type": "mysql",
-            "url": "$DATABASE_URL"
+            "url": "CLEARDB_DATABASE_URL"
         },
         "whitelist": [
             "*.jira-dev.com",
