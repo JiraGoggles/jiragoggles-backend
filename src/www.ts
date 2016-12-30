@@ -1,23 +1,5 @@
 "use strict";
 
-console.log("before require");
-var pg = require('pg');
-
-console.log("before ssl");
-pg.defaults.ssl = true;
-console.log("before connect " + process.env.DATABASE_URL);
-pg.connect(process.env.DATABASE_URL, function(err, client) {
-    console.log("in function");
-    if (err) throw err;
-    console.log('Connected to postgres! Getting schemas...');
-
-    client
-        .query('SELECT table_schema,table_name FROM information_schema.tables;')
-        .on('row', function(row) {
-            console.log(JSON.stringify(row));
-        });
-});
-
 
 var server = require("./app");
 var app = server.app;
