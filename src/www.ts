@@ -1,6 +1,13 @@
 "use strict";
 
+var mysql = require("mysql");
+var connection = mysql.createConnection(process.env.CLEARDB_DATABASE_URL);
 
+connection.query('SELECT table_schema,table_name FROM information_schema.tables;', function(err, rows) {
+    if(err) throw err;
+
+    console.log(rows);
+});
 var server = require("./app");
 var app = server.app;
 var addon = server.addon;
