@@ -1,7 +1,7 @@
 "use strict";
 var Schema = require('jugglingdb').Schema;
 var schema = new Schema('mysql', {
-    url: process.env.CLEARDB_DATABASE_URL
+    url: "wrong_address"
 });
 
 schema.on("connected", function () {
