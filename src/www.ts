@@ -1,13 +1,4 @@
 "use strict";
-var Schema = require('jugglingdb').Schema;
-var schema = new Schema('mysql', {
-    url: "wrong_address"
-});
-
-schema.on("connected", function () {
-   console.log("connected to db with juggling");
-});
-
 var server = require("./app");
 var app = server.app;
 var addon = server.addon;

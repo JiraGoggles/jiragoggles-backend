@@ -4,9 +4,10 @@
         "errorTemplate": false,
         "localBaseUrl": "https://alfajiragoggles.herokuapp.com",
         "store": {
-            "adapter": "jugglingdb",
-            "type": "mysql",
-            "url": "$CLEARDB_DATABASE_URL"
+            "adapter": "sequelize",
+            "type": "postgres",
+            "url": "$DATABASE_URL",
+            "ssl": true
         }
     },
     "production": {
@@ -14,9 +15,10 @@
         "errorTemplate": false,
         "localBaseUrl": "https://alfajiragoggles.herokuapp.com",
         "store": {
-            "adapter": "jugglingdb",
-            "type": "mysql",
-            "url": "$CLEARDB_DATABASE_URL"
+            "adapter": "sequelize",
+            "type": "postgres",
+            "url": "$DATABASE_URL",
+            "ssl": true
         },
         "whitelist": [
             "*.jira-dev.com",
