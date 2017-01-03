@@ -23,7 +23,8 @@
             "*.atlassian.net",
             "*.atlassian.com",
             "*.jira.com"
-        ]
+        ],
+        "maxTokenAge": 86400
     },
     "product": "jira"
 }
