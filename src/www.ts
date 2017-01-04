@@ -1,4 +1,5 @@
 "use strict";
+
 var server = require("./app");
 var app = server.app;
 var addon = server.addon;
