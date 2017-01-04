@@ -2,7 +2,7 @@
     "development": {
         "port": 3000,
         "errorTemplate": false,
-        "localBaseUrl": "https://jiragoggles.herokuapp.com",
+        "localBaseUrl": "https://testjiragoggles.herokuapp.com",
         "store": {
             "adapter": "jugglingdb",
             "type": "sqlite3",
@@ -12,7 +12,7 @@
     "production": {
         "port": "$PORT",
         "errorTemplate": false,
-        "localBaseUrl": "https://jiragoggles.herokuapp.com",
+        "localBaseUrl": "https://testjiragoggles.herokuapp.com",
         "store": {
             "adapter": "jugglingdb",
             "type": "mongodb",
