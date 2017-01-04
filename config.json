@@ -15,8 +15,9 @@
         "localBaseUrl": "https://jiragoggles.herokuapp.com",
         "store": {
             "adapter": "jugglingdb",
-            "type": "sqlite3",
-            "database": "store.db"
+            "type": "mongodb",
+            "url": "$MONGODB_URI",
+            "ssl": true
         },
         "whitelist": [
             "*.jira-dev.com",
