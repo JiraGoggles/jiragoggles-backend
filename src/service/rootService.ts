@@ -38,6 +38,21 @@ export class RootService {
     }
 
     private doGetProject(page: PageModel): Promise<CardModel[]> {
+
+        console.log("costam");
+
+        this.httpClient.put({url: 'rest/agile/1.0/issue/rank', json: { "issues": ["JAC-3"], rankBeforeIssue: 'JAC-1'}},
+            (error, response, body) => {
+                console.log(response.statusCode);
+                if (!error && response.statusCode === 200) {
+                    console.log("body: " + body);
+                }
+                else {
+                    console.log("error: " + error);
+                    console.log(body);
+                }
+            });
+
         return new Promise((resolve, reject) => {
             this.httpClient.get('/rest/api/2/project?expand=description', (err, jiraRes, body) => {
                 if (err) {
