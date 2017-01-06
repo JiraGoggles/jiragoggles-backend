@@ -2,7 +2,7 @@
     "development": {
         "port": 3000,
         "errorTemplate": false,
-        "localBaseUrl": "https://881d0290.ngrok.io",
+        "localBaseUrl": "https://cf6f5753.ngrok.io",
         "store": {
             "adapter": "jugglingdb",
             "type": "sqlite3",
@@ -12,7 +12,7 @@
     "production": {
         "port": "$PORT",
         "errorTemplate": false,
-        "localBaseUrl": "https://881d0290.ngrok.io",
+        "localBaseUrl": "https://cf6f5753.ngrok.io",
         "store": {
             "adapter": "jugglingdb",
             "type": "sqlite3",
