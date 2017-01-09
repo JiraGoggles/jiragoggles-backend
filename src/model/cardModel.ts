@@ -7,6 +7,7 @@ export class CardModel {
     id: number;
     key: string;
     name: string;
+    priority: string;
     description: string;
     url: string;
     avatarUrls: Dictionary<String>;

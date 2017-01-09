@@ -11,6 +11,7 @@ export class JqlToCardModel implements Converter<CardModel> {
             key: jqlResponse.key,
             name: jqlResponse.fields.summary,
             type: jqlResponse.fields.issuetype.name,
+            priority: jqlResponse.fields.priority.name,
             url: jqlResponse.self,
             description: jqlResponse.fields.description,
             avatarUrls: null,

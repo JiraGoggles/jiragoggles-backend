@@ -15,6 +15,7 @@ export class ProjectToCardModel implements Converter<CardModel>{
             description: project.description,
             avatarUrls: project.avatarUrls,
             priorityImgUrl: null,
+            priority: null,
             typeImgUrl: null,
             status: null,
             subCards: []
