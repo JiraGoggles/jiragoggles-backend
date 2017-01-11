@@ -34,20 +34,24 @@
         ],
         "webItems": [
             {
-                "url": "/testUrl",
+                "url": "/main?issueKey={issue.key}",
                 "location": "jira.issue.tools",
                 "weight": 200,
                 "tooltip": {
-                    "value": "click me"
+                    "value": "Jira Goggles"
                 },
                 "conditions": [
                     {
                         "condition": "user_is_logged_in"
+                    },
+                    {
+                        "condition": "is_sub_task",
+                        "invert": true
                     }
                 ],
                 "key": "issue-switch-goggles",
                 "name": {
-                    "value": "Find in goggles"
+                    "value": "See in Goggles"
                 }
             }
         ]
