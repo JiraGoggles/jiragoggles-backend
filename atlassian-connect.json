@@ -20,7 +20,6 @@
     ],
     "modules": {
         "generalPages": [
-
             {
                 "key": "jira-goggles",
                 "location": "system.top.navigation.bar",
@@ -31,6 +30,25 @@
                 "conditions": [{
                     "condition": "user_is_logged_in"
                 }]
+            }
+        ],
+        "webItems": [
+            {
+                "url": "/testUrl",
+                "location": "jira.issue.tools",
+                "weight": 200,
+                "tooltip": {
+                    "value": "click me"
+                },
+                "conditions": [
+                    {
+                        "condition": "user_is_logged_in"
+                    }
+                ],
+                "key": "issue-switch-goggles",
+                "name": {
+                    "value": "Find in goggles"
+                }
             }
         ]
     }
