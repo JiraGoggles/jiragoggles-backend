@@ -9,9 +9,8 @@ export default (addon) => {
     router.put('/issue/:id/:direction/:referenceId', (request, response) => {
         const httpClient = getHttpClient(addon, request);
         const rankService = new RankService(httpClient);
-
         rankService.rankIssue(request.params.id, request.params.referenceId, request.params.direction);
-        response.sendStatus(200);
+        response.status(200).json("");
 
     });
 
@@ -20,7 +19,7 @@ export default (addon) => {
         const rankService = new RankService(httpClient);
 
         rankService.rankEpic(request.params.id, request.params.referenceId, request.params.direction);
-        response.sendStatus(200);
+        response.status(200).json("");
     });
 
     return router;
