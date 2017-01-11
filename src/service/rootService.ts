@@ -38,6 +38,7 @@ export class RootService {
     }
 
     private doGetProject(page: PageModel): Promise<CardModel[]> {
+
         return new Promise((resolve, reject) => {
             this.httpClient.get('/rest/api/2/project?expand=description', (err, jiraRes, body) => {
                 if (err) {
