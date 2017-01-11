@@ -34,7 +34,7 @@
         ],
         "webItems": [
             {
-                "url": "/main?issueKey={issue.key}",
+                "url": "/main?issueKey={issue.key}&projectKey={project.key}",
                 "location": "jira.issue.tools",
                 "weight": 200,
                 "tooltip": {
