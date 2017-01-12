@@ -18,3 +18,8 @@ app.js
 app.js.map
 credentials.js.map
 www.js.map
+
+/public
+!/public/index.html
+/enums/*.js
+/enums/*.js.map
