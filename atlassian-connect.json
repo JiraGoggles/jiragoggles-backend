@@ -15,7 +15,8 @@
         "installed": "/installed"
     },
     "scopes": [
-        "ADMIN",
+        "READ",
+        "WRITE",
         "ACT_AS_USER"
     ],
     "modules": {
