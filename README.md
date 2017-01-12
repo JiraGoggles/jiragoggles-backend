@@ -1,5 +1,5 @@
 # Jira Goggles
-Jira Goggles project - backend.
+[![Build Status](https://travis-ci.org/JiraGoggles/jiragoggles-backend.svg?branch=master)](https://travis-ci.org/JiraGoggles/jiragoggles-backend)
 
 After cloning the repo type in the console:
 ```r
