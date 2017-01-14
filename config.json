@@ -12,7 +12,7 @@
     "production": {
         "port": "$PORT",
         "errorTemplate": false,
-        "localBaseUrl": "https://testjiragoggles.herokuapp.com",
+        "localBaseUrl": "$APP_URL",
         "store": {
             "adapter": "jugglingdb",
             "type": "mongodb",
