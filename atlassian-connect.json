@@ -1,5 +1,5 @@
 {
-    "key": "jira-goggles",
+    "key": "goggles-plugin",
     "name": "JIRA Goggles",
     "description": "An add-on that helps managing JIRA projects",
     "baseUrl": "{{localBaseUrl}}",
@@ -11,7 +11,6 @@
         "type": "jwt"
     },
     "lifecycle": {
-        // atlassian-connect-express expects this route to be configured to manage the installation handshake
         "installed": "/installed"
     },
     "scopes": [
