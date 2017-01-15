@@ -1,7 +1,7 @@
 {
     "key": "goggles-plugin",
     "name": "JIRA Goggles",
-    "description": "An add-on that helps managing JIRA projects",
+    "description": "JIRA Goggles - In pursuit of a company alignment",
     "baseUrl": "{{localBaseUrl}}",
     "links": {
         "self": "{{localBaseUrl}}/atlassian-connect.json",
