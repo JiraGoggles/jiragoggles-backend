@@ -5,7 +5,7 @@
     "baseUrl": "{{localBaseUrl}}",
     "links": {
         "self": "{{localBaseUrl}}/atlassian-connect.json",
-        "homepage": "{{localBaseUrl}}/atlassian-connect.json"
+        "homepage": "https://jiragoggles.com"
     },
     "authentication": {
         "type": "jwt"
@@ -20,7 +20,6 @@
     ],
     "modules": {
         "generalPages": [
-
             {
                 "key": "jira-goggles",
                 "location": "system.top.navigation.bar",
