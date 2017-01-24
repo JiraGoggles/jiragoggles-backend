@@ -24,7 +24,7 @@
                 "key": "jira-goggles",
                 "location": "system.top.navigation.bar",
                 "name": {
-                    "value": "Jira Goggles"
+                    "value": "Goggles"
                 },
                 "url": "/main",
                 "conditions": [{
