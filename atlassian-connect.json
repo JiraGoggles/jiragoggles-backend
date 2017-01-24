@@ -1,7 +1,7 @@
 {
     "key": "goggles-plugin",
-    "name": "JIRA Goggles",
-    "description": "JIRA Goggles - In pursuit of a company alignment",
+    "name": "Portfolio Goggles for JIRA",
+    "description": "Portfolio Goggles for JIRA",
     "baseUrl": "{{localBaseUrl}}",
     "links": {
         "self": "{{localBaseUrl}}/atlassian-connect.json",
@@ -21,7 +21,7 @@
     "modules": {
         "generalPages": [
             {
-                "key": "jira-goggles",
+                "key": "goggles",
                 "location": "system.top.navigation.bar",
                 "name": {
                     "value": "Goggles"
