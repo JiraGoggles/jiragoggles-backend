@@ -11,7 +11,7 @@ export default (addon) => {
     apiRouter.use(authMiddleware.getAsExpressMiddleware());
     apiRouter.use("/card", cardRoute(addon));
     apiRouter.use("/rank", rankRoute(addon));
-    apiRouter.use("/auth", authRoute(addon));
+    apiRouter.use("/auth", authRoute());
 
     const mainRouter = express.Router();
     mainRouter.use('/api', apiRouter);

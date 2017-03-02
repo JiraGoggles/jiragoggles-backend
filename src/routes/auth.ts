@@ -1,9 +1,7 @@
 import * as express from "express";
-import AuthMiddleware from "../auth/authMiddleware";
 
-export default (addon) => {
+export default () => {
     const router = express.Router();
-    const authMiddleware = new AuthMiddleware(addon);
 
     router.get("/", (req, res) => {
         res.send({
